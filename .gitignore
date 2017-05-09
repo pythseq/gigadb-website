@@ -16,6 +16,7 @@ protected/scripts/set_env.sh
 protected/scripts/update_links.sh
 themes/classic/views/
 files/certs
+sql/ftpusers.sql
 
 # Vagrant
 *.vagrant

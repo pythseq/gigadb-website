@@ -75,21 +75,9 @@ end
 #### Set up PostgreSQL database ####
 ####################################
 
-# If provisioning by Chef-Solo, need to manually add SQL file
-directory '/vagrant/sql' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  action :create
-end
-
-cookbook_file '/vagrant/sql/ftpusers_testdata.sql' do
-    not_if { ::File.exist?('/vagrant/sql/ftpusers_testdata.sql') }
-    source 'sql/ftpusers_testdata.sql'
-    owner 'root'
-    group 'root'
-    mode '0755'
-    action :create
+template "/vagrant/sql/ftpusers.sql" do
+    source "ftpusers.sql.erb"
+    mode "0644"
 end
 
 # Defined in Vagrantfile - provides database access details
@@ -111,7 +99,7 @@ if host == 'localhost'
         db_user = db[:user]
         password = db[:password]
         database = db[:database]
-        sql_script = '/vagrant/sql/ftpusers_testdata.sql'
+        sql_script = '/vagrant/sql/ftpusers.sql'
 
         code <<-EOH
             export PGPASSWORD='#{password}'; psql -U #{db_user} -h localhost #{database} < #{sql_script}

@@ -103,7 +103,8 @@
         "password": "vagrant",
         "host": "localhost",
         "port": "5432",
-        "database": "ftpusers"
+        "database": "ftpusers",
+	    "user_password_prefix": ""
       },
       "mount_point": "/mnt/chef",
       "device": "/opt/chef"
