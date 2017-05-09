@@ -62,4 +62,11 @@ To gain SSH access to the VM:
 $ vagrant ssh ftp-server
 ```
 
+To log into the FTP users database:
+
+```bash
+$ psql -U gigadb -h localhost -d ftpusers -W
+ftpusers=> select * from ftp_users;
+```
+
 
