@@ -117,14 +117,14 @@ when 'development'
       	level :info
     end
 
-    mount_point = node[:fileserver][:mount_point]
-    directory mount_point do
+    test_mount_point = node[:fileserver][:test_mount_point]
+    directory test_mount_point do
       action :create
     end
 
     # Test mount resource in Chef by mounting /opt/chef onto /mnt/chef
-    remote_folder = node[:fileserver][:device]
-    mount mount_point do
+    remote_folder = node[:fileserver][:test_device]
+    mount test_mount_point do
       device remote_folder
       fstype 'none'
       options 'bind,rw'
@@ -146,6 +146,7 @@ when 'development'
         package pkg
     end
 
+	# Location of pub data on FTP server
     local_root = node[:vsftpd][:config][:local_root]
     bash 'Create local root directory' do
         code <<-EOH
@@ -162,12 +163,31 @@ when 'development'
         EOH
     end
 
-    temp_upload_dir = "#{mount_point}/temporary_upload"
+    temp_upload_dir = "#{test_mount_point}/temporary_upload"
     directory temp_upload_dir do
       owner 'ftp'
       group 'ftp'
       mode '0755'
       action :create
+    end
+
+    ######################################################
+    #### Install update_ftpusers script from template ####
+    ######################################################
+
+    directory '/usr/local/fileserver/bin' do
+      owner 'root'
+      group 'root'
+      mode '0755'
+      recursive true
+      action :create
+    end
+
+    template "/usr/local/fileserver/bin/update_ftpusers.sh" do
+        source "update_ftpusers.sh.erb"
+        owner 'root'
+        group 'root'
+        mode 0700
     end
 
 when 'production'
@@ -178,25 +198,6 @@ when 'production'
 	end
 
 	# Check temporary upload directory for users
-end
-
-######################################################
-#### Install update_ftpusers script from template ####
-######################################################
-
-directory '/usr/local/fileserver/bin' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  recursive true
-  action :create
-end
-
-template "/usr/local/fileserver/bin/update_ftpusers.sh" do
-    source "update_ftpusers.sh.erb"
-    owner 'root'
-    group 'root'
-    mode 0700
 end
 
 #########################################

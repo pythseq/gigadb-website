@@ -97,7 +97,7 @@
       "aws_security_groups": ""
     },
     "fileserver": {
-  	  "gigadb_data_location": "/export2/ftp_panda/pub/10.5524",
+  	  "gigadb_data_location": "",
       "db": {
         "sql_script": "/tmp/ftpusers_testdata.sql",
         "user": "gigadb",
@@ -107,12 +107,9 @@
         "database": "ftpusers",
 	    "user_password_prefix": ""
       },
-      "mount_point": "/mnt/chef",
-      "device": "/opt/chef"
+      "test_mount_point": "/mnt/chef",
+      "test_device": "/opt/chef"
     },
-    "vsftpd": {
-	  "allowed": ["vagrant"]
-	},
     "nginx": {
       "log_dir": "/var/log/nginx"
     },
@@ -127,7 +124,40 @@
     },
     "ssh": {
       "enable_password": "no"
-    }
+    },
+    "vsftpd": {
+	  "allowed": [
+		"vagrant"
+	  ],
+	  "config": {
+		"listen": "YES",
+		"ftpd_banner": "Welcome to the GigaDB FTP service",
+		"anonymous_enable": "YES",
+		"anon_world_readable_only": "YES",
+		"userlist_deny": "YES",
+		"local_enable": "YES",
+		"pam_service_name": "vsftpd",
+		"anon_mkdir_write_enable": "NO",
+		"anon_root": "/var/ftp/pub",
+		"no_anon_password": "YES",
+		"local_root": "/var/ftp/pub",
+		"chroot_local_user": "YES",
+		"chroot_list_enable": "NO",
+		"write_enable": "YES",
+		"local_umask": "077",
+		"dirmessage_enable": "YES",
+		"max_per_ip": "2",
+		"max_clients": "15",
+		"anon_max_rate": "128000",
+		"connect_from_port_20": "YES",
+		"pasv_enable": "YES",
+		"xferlog_enable": "YES",
+		"xferlog_std_format": "YES",
+		"xferlog_file": "/var/log/xferlog",
+		"dual_log_enable": "YES",
+		"vsftpd_log_file": "/var/log/vsftpd.log"
+	  }
+	}
   },
   "json_class": "Chef::Environment",
   "description": "Test environment for deploying onto local Vagrant VMs",
