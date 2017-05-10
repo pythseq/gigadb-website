@@ -4,8 +4,6 @@
 #
 # Copyright 2016, GigaScience
 #
-# All rights reserved - Do Not Redistribute
-#
 
 include_recipe 'user'
 include_recipe 'postgresql::server'
@@ -110,50 +108,76 @@ end
 ############################
 #### Set up NFS folders ####
 ############################
+data_location = node[:fileserver][:gigadb_data_location]
 
-mount_point = node[:fileserver][:mount_point]
-directory mount_point do
-  action :create
-end
+case node.chef_environment
+when 'development'
+    log 'message' do
+    	message 'Mounting test folders'
+      	level :info
+    end
 
-# Test mount resource in Chef by mounting /opt/chef onto /mnt/chef
-remote_folder = node[:fileserver][:device]
-mount mount_point do
-  device remote_folder
-  fstype 'none'
-  options 'bind,rw'
-  action [:mount, :enable]
-end
+    mount_point = node[:fileserver][:mount_point]
+    directory mount_point do
+      action :create
+    end
 
-###############################
-#### Install VSFTPD server ####
-###############################
+    # Test mount resource in Chef by mounting /opt/chef onto /mnt/chef
+    remote_folder = node[:fileserver][:device]
+    mount mount_point do
+      device remote_folder
+      fstype 'none'
+      options 'bind,rw'
+      action [:mount, :enable]
+    end
 
-# For testing
-#bash 'Install ftp client' do
-#    code <<-EOH
-#        sudo yum -y install ftp
-#    EOH
-#end
+    ###############################
+    #### Install VSFTPD server ####
+    ###############################
 
-['ftp'].each do |pkg|
-    package pkg
-end
+    # For testing
+    #bash 'Install ftp client' do
+    #    code <<-EOH
+    #        sudo yum -y install ftp
+    #    EOH
+    #end
 
-local_root = node[:vsftpd][:config][:local_root]
-bash 'Create local root directory' do
-    code <<-EOH
-        mkdir #{local_root}
-        chown -R ftp:ftp #{local_root}
-        chmod -R u-w #{local_root}
-    EOH
-end
+    ['ftp'].each do |pkg|
+        package pkg
+    end
 
-bash 'Create test data' do
-    code <<-EOH
-        echo "stuff" >#{local_root}/foo.txt
-        chown ftp:ftp #{local_root}/foo.txt
-    EOH
+    local_root = node[:vsftpd][:config][:local_root]
+    bash 'Create local root directory' do
+        code <<-EOH
+            mkdir #{local_root}
+            chown -R ftp:ftp #{local_root}
+            chmod -R u-w #{local_root}
+        EOH
+    end
+
+    bash 'Create test data' do
+        code <<-EOH
+            echo "stuff" >#{local_root}/foo.txt
+            chown ftp:ftp #{local_root}/foo.txt
+        EOH
+    end
+
+    temp_upload_dir = "#{mount_point}/temporary_upload"
+    directory temp_upload_dir do
+      owner 'ftp'
+      group 'ftp'
+      mode '0755'
+      action :create
+    end
+
+when 'production'
+	log 'message' do
+  		message 'GigaDB data files do not exist!'
+  		level :info
+  		not_if { ::Dir.exist?(data_location) }
+	end
+
+	# Check temporary upload directory for users
 end
 
 ######################################################
@@ -165,14 +189,6 @@ directory '/usr/local/fileserver/bin' do
   group 'root'
   mode '0755'
   recursive true
-  action :create
-end
-
-temp_upload_dir = "#{mount_point}/temporary_upload"
-directory temp_upload_dir do
-  owner 'ftp'
-  group 'ftp'
-  mode '0755'
   action :create
 end
 

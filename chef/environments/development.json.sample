@@ -97,6 +97,7 @@
       "aws_security_groups": ""
     },
     "fileserver": {
+  	  "gigadb_data_location": "/export2/ftp_panda/pub/10.5524",
       "db": {
         "sql_script": "/tmp/ftpusers_testdata.sql",
         "user": "gigadb",
