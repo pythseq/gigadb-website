@@ -19,7 +19,7 @@ $PSQL \
   -X \
   -h $DB_HOST \
   -U $DB_USER \
-  -c "select name, password from ftp_user;" \
+  -c "select name, password from ftp_users;" \
   --single-transaction \
   --set AUTOCOMMIT=off \
   --set ON_ERROR_STOP=on \
