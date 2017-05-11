@@ -29,25 +29,30 @@ $PSQL \
   --quiet \
   -d $DB_NAME \
 | while read name passwd ; do
-  ret=false
-  getent passwd ${name} >/dev/null 2>&1 && ret=true
-  # Check if user exists
-  if $ret; then
-    echo "yes ${name} user exists"
-    # Update password for user
-    echo ${name}:${passwd} | chpasswd
-  else
-    echo "No, ${name} user does not exist"
-    # Create account for user
-    useradd -c "${name}" -m ${name}
-    # Add password for user
-    echo ${name}:${passwd} | chpasswd
-    # Create ftp user config file
-    touch <%= node[:vsftpd][:etcdir] + '/users.d/' %>${name}
-    echo "local_root="<%= node[:fileserver][:test_mount_point] + '/temporary_upload/' %>${name} >> <%= node[:vsftpd][:etcdir] + '/users.d/' %>${name}
-    # Create directory for user to upload files by FTP
-    mkdir <%= node[:fileserver][:test_mount_point] + '/temporary_upload/' %>${name}
-    chown ${name}:${name} <%= node[:fileserver][:test_mount_point] + '/temporary_upload/' %>${name}
-    chmod 0700 <%= node[:fileserver][:test_mount_point] + '/temporary_upload/' %>${name}
-  fi
+	ret=false
+	getent passwd ${name} >/dev/null 2>&1 && ret=true
+	# Check if user exists
+	if $ret; then
+		echo "yes ${name} user exists"
+		# Update password for user
+		echo ${name}:${passwd} | chpasswd
+	else
+		echo "No, ${name} user does not exist"
+		# Create account for user
+		useradd -c "${name}" -m ${name}
+		# Add password for user
+		echo ${name}:${passwd} | chpasswd
+
+		# Create ftp user config file
+		touch <%= node[:vsftpd][:etcdir] + '/users.d/' %>${name}
+		echo "local_root="<%= node[:fileserver][:test_mount_point] + '/temporary_upload/' %>${name} >> <%= node[:vsftpd][:etcdir] + '/users.d/' %>${name}
+	fi
+
+	# Create directory for user to upload files by FTP if it does NOT exist
+	USER_DIR=<%= node[:fileserver][:test_mount_point] + '/temporary_upload/' %>${name}
+	if [ ! -d "$USER_DIR" ]; then
+		mkdir $USER_DIR
+		chown ${name}:${name} $USER_DIR
+		chmod 0700 $USER_DIR
+	fi
 done
