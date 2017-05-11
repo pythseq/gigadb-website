@@ -9,80 +9,21 @@ include_recipe 'user'
 include_recipe 'postgresql::server'
 include_recipe 'vsftpd'
 include_recipe 'cron'
-include_recipe 'nfs::client4'
-
-['vim', 'tree'].each do |pkg|
-    package pkg
-end
-
-# iptables not required for default development environment
-service 'iptables' do
-    action [:disable, :stop]
-end
-
-##############################
-#### User and group admin ####
-##############################
-
-# Create user accounts
-user1 = node[:gigadb][:user1]
-user1_name = node[:gigadb][:user1_name]
-user1_public_key = node[:gigadb][:user1_public_key]
-
-user_account node[:gigadb][:user1] do
-    comment   node[:gigadb][:user1_name]
-    ssh_keys  node[:gigadb][:user1_public_key]
-    home      "/home/#{node[:gigadb][:user1]}"
-end
-
-user2 = node[:gigadb][:user2]
-user2_name = node[:gigadb][:user2_name]
-user2_public_key = node[:gigadb][:user2_public_key]
-
-user_account node[:gigadb][:user2] do
-    comment   node[:gigadb][:user2_name]
-    ssh_keys  node[:gigadb][:user2_public_key]
-    home      "/home/#{node[:gigadb][:user2]}"
-end
-
-admin_user = node[:gigadb][:admin_user]
-admin_user_name = node[:gigadb][:admin_user_name]
-admin_user_public_key = node[:gigadb][:admin_user_public_key]
-
-user_account node[:gigadb][:admin_user] do
-    comment   node[:gigadb][:admin_user_name]
-    ssh_keys  node[:gigadb][:admin_user_public_key]
-    home      "/home/#{node[:gigadb][:admin_user]}"
-end
-
-# Create group for GigaDB admins
-group 'gigadb-admin' do
-  action    :create
-  members   [user1, user2, admin_user]
-  append    true
-end
-
-group 'wheel' do
-    action  :modify
-    members [user1, user2, admin_user]
-    append  true
-end
 
 
 ####################################
 #### Set up PostgreSQL database ####
 ####################################
 
+# Generate SQL script to create FTP users database
 template "/vagrant/sql/ftpusers.sql" do
     source "ftpusers.sql.erb"
     mode "0644"
 end
 
-# Defined in Vagrantfile - provides database access details
 db = node[:fileserver][:db]
 host = node[:fileserver][:db][:host]
 if host == 'localhost'
-
     db_user = db[:user]
 
     postgresql_user db_user do
@@ -105,13 +46,72 @@ if host == 'localhost'
     end
 end
 
-############################
-#### Set up NFS folders ####
-############################
-data_location = node[:fileserver][:gigadb_data_location]
-
 case node.chef_environment
 when 'development'
+	include_recipe 'nfs::client4'
+
+	# iptables not required for default development environment
+    service 'iptables' do
+        action [:disable, :stop]
+    end
+
+    # Install vim and tree
+    ['vim', 'tree'].each do |pkg|
+        package pkg
+    end
+
+	################################
+    #### Set up users and group ####
+    ################################
+
+    # Create user accounts
+    user1 = node[:gigadb][:user1]
+    user1_name = node[:gigadb][:user1_name]
+    user1_public_key = node[:gigadb][:user1_public_key]
+
+    user_account node[:gigadb][:user1] do
+        comment   node[:gigadb][:user1_name]
+        ssh_keys  node[:gigadb][:user1_public_key]
+        home      "/home/#{node[:gigadb][:user1]}"
+    end
+
+    user2 = node[:gigadb][:user2]
+    user2_name = node[:gigadb][:user2_name]
+    user2_public_key = node[:gigadb][:user2_public_key]
+
+    user_account node[:gigadb][:user2] do
+        comment   node[:gigadb][:user2_name]
+        ssh_keys  node[:gigadb][:user2_public_key]
+        home      "/home/#{node[:gigadb][:user2]}"
+    end
+
+    admin_user = node[:gigadb][:admin_user]
+    admin_user_name = node[:gigadb][:admin_user_name]
+    admin_user_public_key = node[:gigadb][:admin_user_public_key]
+
+    user_account node[:gigadb][:admin_user] do
+        comment   node[:gigadb][:admin_user_name]
+        ssh_keys  node[:gigadb][:admin_user_public_key]
+        home      "/home/#{node[:gigadb][:admin_user]}"
+    end
+
+    # Create group for GigaDB admins
+    group 'gigadb-admin' do
+      action    :create
+      members   [user1, user2, admin_user]
+      append    true
+    end
+
+    group 'wheel' do
+        action  :modify
+        members [user1, user2, admin_user]
+        append  true
+    end
+
+	############################
+    #### Set up NFS folders ####
+    ############################
+
     log 'message' do
     	message 'Mounting test folders'
       	level :info
@@ -131,20 +131,9 @@ when 'development'
       action [:mount, :enable]
     end
 
-    ###############################
-    #### Install VSFTPD server ####
-    ###############################
-
-    # For testing
-    #bash 'Install ftp client' do
-    #    code <<-EOH
-    #        sudo yum -y install ftp
-    #    EOH
-    #end
-
-    ['ftp'].each do |pkg|
-        package pkg
-    end
+    ###############################################
+    #### Add data for testing on VSFTPD server ####
+    ###############################################
 
 	# Location of pub data on FTP server
     local_root = node[:vsftpd][:config][:local_root]
@@ -191,13 +180,48 @@ when 'development'
     end
 
 when 'production'
+	########################################
+	#### Check location of GigaDB data #####
+	########################################
+
+	data_location = node[:fileserver][:gigadb_data_location]
 	log 'message' do
   		message 'GigaDB data files do not exist!'
   		level :info
   		not_if { ::Dir.exist?(data_location) }
 	end
 
+	##############################################
+	#### Check location of user upload files #####
+	##############################################
 	# Check temporary upload directory for users
+	user1_temp_upload_dir = "#{test_mount_point}/temporary_upload/user1"
+	log 'message' do
+		message 'File upload folder for user1 does not exist!'
+		level :info
+		not_if { ::Dir.exist?(user1_temp_upload_dir) }
+	end
+
+	######################################################
+	#### Install update_ftpusers script from template ####
+	######################################################
+
+	directory '/usr/local/fileserver/bin' do
+	  owner 'root'
+	  group 'root'
+	  mode '0755'
+	  recursive true
+	  action :create
+	end
+
+	# update_ftpusers.sh script creates the user upload dirs and
+	# VSFTPD user config files
+	template "/usr/local/fileserver/bin/update_ftpusers.sh" do
+		source "update_ftpusers.sh.erb"
+		owner 'root'
+		group 'root'
+		mode 0700
+	end
 end
 
 #########################################
