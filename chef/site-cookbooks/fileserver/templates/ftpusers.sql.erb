@@ -1,4 +1,4 @@
-CREATE TABLE ftp_users (name VARCHAR(20), password VARCHAR(20));
+CREATE TABLE ftp_users (name VARCHAR(20) primary key, password VARCHAR(20));
 ALTER TABLE ftp_users OWNER TO gigadb;
 
 insert into ftp_users values ('user1', '<%= node[:fileserver][:db][:user_password_prefix] %>gigadb1');
