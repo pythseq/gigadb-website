@@ -6,9 +6,9 @@
 #
 
 include_recipe 'user'
-include_recipe 'postgresql::server'
-include_recipe 'vsftpd'
-include_recipe 'cron'
+include_recipe 'postgresql::server' unless ::File.exist?("/var/lib/pgsql/9.1/data/postgresql.conf")
+include_recipe 'vsftpd' unless ::File.exist?("/etc/vsftpd/ftpusers")
+include_recipe 'cron' unless ::File.exist?("/var/spool/cron")
 
 
 ####################################
