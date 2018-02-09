@@ -158,7 +158,15 @@ HTML;
                             $types[$externalLink->externalLinkType->name] = 1;
                         }
                         foreach ($types as $typeName => $value) {
-                            $typeNameLabel = preg_replace('/(?:^|_)(.?)/e',"strtoupper('$1')",$typeName);
+                            // The /e modifier in preg_replace is deprecated in php 5.4
+                            // Need to use preg_replace_callback
+                            // $typeNameLabel = preg_replace('/(?:^|_)(.?)/e',"strtoupper('$1')",$typeName);
+                            $typeNameLabel = preg_replace_callback(
+                                '/(?:^|_)(.?)/',
+                                function($matches) { return strtoupper($matches[1]); },
+                                $typeName
+                            );
+
                             $typeNameLabel = preg_replace('/(?<=\\w)(?=[A-Z])/'," $1", $typeNameLabel);
                             $typeNameLabel = trim($typeNameLabel);
                             if($typeNameLabel !== 'Protocols.io' and $typeNameLabel !== 'J Browse' and $typeNameLabel !== '3 D Models')
