@@ -32,31 +32,13 @@ $ cp yii2-laradock/env-gigadb yii2-laradock/.env
 
 Chef-Solo is used to create a number of website source files from templates. The
 values to configure various variables in these template files come from a 
-`development.json` file located in the `gigadb-website/chef/environments`
-directory. This file can be created by copying the `development.json.sample` 
-into a new file called `development.json`:
+`docker.json` file located in the `gigadb-website/chef/environments`
+directory. This file can be created by copying the `docker.json.sample` 
+into a new file called `docker.json`:
 
 ```bash
-cp chef/environments/development.json.sample chef/environments/development.json
+cp chef/environments/docker.json.sample chef/environments/docker.json
 ```
-
-Ensure the four variables in your development.json below are set as follows:
-
-```bash
-{
-  "name": "development",
-  "default_attributes": {
-    "gigadb": {
-      "db": {
-        "host": "postgres"
-      },
-      "site_dir": "/var/www",
-      "root_dir": "/vagrant",
-      "yii_path": "/opt/yii-1.1.16",
-```
-
-The values for the other variables in this `development.json` file can be left 
-as they are.
 
 Vagrant can now be used to spin up an Ubuntu VM with Docker installed and with 
 the `gigadb-website` repository folder synchronised at `/vagrant`:
