@@ -19,6 +19,7 @@ files/certs
 files/html/help.html
 yii-1.1.16
 test_users.txt
+images/tempcaptcha/
 
 # css
 css/site.css
@@ -55,3 +56,14 @@ nbproject/project.properties
 
 # MacOSX
 .DS_Store
+
+
+# Testing
+tests/fixtures/affiliate_users_credentials
+sql/temp_command.sql
+
+
+# Behat
+
+Behat/vendor
+
