@@ -1,15 +1,17 @@
 # Installing GigaDB as a multiple Docker container application
 
-GigaDB can be deployed as a multiple container application using Docker. Using
-the Docker Compose tool, GigaDB can be deployed for development work using
-three containers running NGINX, PHP-FPM and PostgreSQL services.
+## Deploying gigadb-website
+
+GigaDB can be deployed as a multiple container application using Docker. This 
+involves using the Docker Compose tool which deploys three separate containers 
+to run NGINX, PHP-FPM and PostgreSQL which makes up GigaDB.
 
 The deployment of GigaDB with Docker uses the 
 [yii2-laradock](https://github.com/ydatech/yii2-laradock) fork from
 [Laradock](https://github.com/laradock/laradock) Docker PHP development
 framework created by [Mahmoud Zalt](https://github.com/Mahmoudz). 
 
-## Steps
+### Steps
 
 After you have `git clone https://github.com/gigascience/gigadb-website.git`, 
 you will downloaded the `gigadb-website` repository. The next step is to 
@@ -61,7 +63,7 @@ $ docker-compose up -d nginx postgres
 If this docker-compose process is successful then the GigaDB website will be 
 visible at [http://192.168.42.10]( http://192.168.42.10) on your web browser.
 
-## List containers
+### List containers
 
 All of the project containers in this Dockerised version of GigaDB can be 
 listed:
@@ -90,28 +92,28 @@ You will see that GigaDB is comprised on 5 containers:
  * **yii2laradock_workspace_1** provides a container that allows you to run
   artisan and other command line tools when doing development coding for GigaDB.
 
-# Check log for container
+### Check log for container
 
 ```bash
 $ docker-compose logs <name of container>
 ```
 
-# Build images
+### Build images
 ```bash
 $ docker-compose build <name of container>
 ```
 
-# Delete containers
+### Delete containers
 ```bash
 $ docker-compose down -v
 ```
 
-# Log into a  container
+### Log into a  container
 ```bash
 $ docker exec -it yii2laradock_nginx_1 bash
 ```
 
-# Host access to Docker on Ubuntu VM
+### Host access to Docker on Ubuntu VM
 
 You can access the Docker daemon that is running on the Ubuntu VM directly from
 your (host) computer without logging into the VM. For example, you can execute
@@ -138,7 +140,7 @@ Server:
 
 ```
 
-# pgAdmin
+### pgAdmin
 
 The PostgreSQL database can be managed using the pgAdmin tool. This container
 can be deployed using the docker-compose tool:
@@ -158,3 +160,106 @@ Server` and provide a new name, e.g. `gigadb`. Click on the connection tab and
 input the hostname/address as `192.168.42.10`. Use `gigadb ` as the username and
 `vagrant` as the password to access the gigadb postgres database.
 
+## Deploying gigadb-fileserver
+
+A file server provides access to the files managed by GigaDB. A test version of
+this file server can be deployed as a multi-Docker application.
+
+If you have not already created a Ubuntu Docker VM, do this using the 
+`vagrant up` command, SSH into the machine and go to the `yii2-laradock` 
+directory:
+
+```bash
+$ vagrant up
+$ vagrant ssh
+$ cd /vagrant/yii2-laradock
+
+```
+
+Now use the docker-compose tool to deploy the gigadb-fileserver application:
+
+```bash
+$ docker-compose up fileserver-vsftpd
+```
+
+This will create four docker applications:
+
+```
+$ docker ps -a
+CONTAINER ID        IMAGE                              COMMAND                  CREATED             STATUS                      PORTS                        NAMES
+8e8ffa1d4539        yii2laradock_fileserver-vsftpd     "/usr/sbin/run-vsftp…"   20 minutes ago      Up 19 minutes               20/tcp, 0.0.0.0:21->21/tcp   yii2laradock_fileserver-vsftpd_1
+0479f3d7867b        yii2laradock_workspace             "/sbin/my_init"          2 hours ago         Up 2 hours                  0.0.0.0:2222->22/tcp         yii2laradock_workspace_1
+49d09cf94c70        yii2laradock_fileserver-postgres   "docker-entrypoint.s…"   2 hours ago         Up 2 hours                  0.0.0.0:5432->5432/tcp       yii2laradock_fileserver-postgres_1
+ba3f6566e4e2        tianon/true                        "/true"                  2 hours ago         Exited (0) 20 minutes ago                                yii2laradock_applications_1
+```
+
+To log into the VSFTPD server:
+
+```bash
+$ docker exec -it yii2laradock_fileserver-vsftpd_1 bash
+[root@8e8ffa1d4539 /]# 
+```
+
+To test anonymous FTP file download:
+
+```bash
+# Find IP address of VSFTPD container using container ID
+$ docker inspect 8e8ffa1d4539
+# The IP address is found in the IPAddress attribute of the JSON output
+# Test anonymous login using 'ftp' as user name
+$ ftp 172.19.0.4
+Connected to 172.19.0.4.
+220 'Welcome to the GigaDB FTP service'
+Name (172.19.0.4:vagrant): ftp
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp> ls
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+-rw-r--r--    1 ftp      ftp            17 Mar 05 02:47 test.txt
+226 Directory send OK.
+ftp> get test.txt
+local: test.txt remote: test.txt
+200 PORT command successful. Consider using PASV.
+150 Opening BINARY mode data connection for test.txt (17 bytes).
+226 Transfer complete.
+17 bytes received in 0.00 secs (240.6024 kB/s)
+ftp> exit
+221 Goodbye.
+```
+
+Test FTP file upload by user2:
+
+```bash
+$ ftp 172.19.0.4
+Connected to 172.19.0.4
+220 (vsFTPd 3.0.2)
+Name (172.19.0.2:vagrant): user2
+331 Please specify the password.
+# Use 'gigadb2' as password
+Password:
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp> put test_file
+local: test_file remote: test_file
+200 PORT command successful. Consider using PASV.
+150 Ok to send data.
+226 Transfer complete.
+12 bytes sent in 0.00 secs (142.9116 kB/s)
+ftp> ls
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+-rw-------    1 1000     1000           12 Mar 07 03:28 test_file
+226 Directory send OK.
+ftp> 
+```
+
+Deleting a container and removing its image:
+
+```bash
+$ docker stop yii2laradock_fileserver-vsftpd_1
+$ docker rm yii2laradock_fileserver-vsftpd_1
+$ docker rmi yii2laradock_fileserver-vsftpd
+```
