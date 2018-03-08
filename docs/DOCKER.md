@@ -1,7 +1,5 @@
 # Installing GigaDB as a multiple Docker container application
 
-## Deploying gigadb-website
-
 GigaDB can be deployed as a multiple container application using Docker. This 
 involves using the Docker Compose tool which deploys a number of containers to
 run the services required for hosting the GigaDB website and file server. The 
