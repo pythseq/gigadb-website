@@ -3,21 +3,21 @@
 ## Deploying gigadb-website
 
 GigaDB can be deployed as a multiple container application using Docker. This 
-involves using the Docker Compose tool which deploys three separate containers 
-to run NGINX, PHP-FPM and PostgreSQL which makes up GigaDB.
-
-The deployment of GigaDB with Docker uses the 
-[yii2-laradock](https://github.com/ydatech/yii2-laradock) fork from
+involves using the Docker Compose tool which deploys a number of containers to
+run the services required for hosting the GigaDB website and file server. The 
+deployment of GigaDB with Docker uses the 
+[yii2-laradock](https://github.com/ydatech/yii2-laradock) fork from the
 [Laradock](https://github.com/laradock/laradock) Docker PHP development
 framework created by [Mahmoud Zalt](https://github.com/Mahmoudz). 
 
-### Steps
+### Procedure
 
 After you have `git clone https://github.com/gigascience/gigadb-website.git`, 
-you will downloaded the `gigadb-website` repository. The next step is to 
-download the GigaDB-specific Laradock project as a sub-module:
+you will have downloaded the `gigadb-website` repository. The next step is to 
+download the GigaDB-specific Laradock project into the gigadb-website repo as a 
+sub-module:
 ```bash
-# Change directory
+# Change directory into repository
 $ cd gigadb-website
 # Change branch
 $ git checkout develop
@@ -32,8 +32,14 @@ Now create a docker-compose configuration file in the `yii2-laradock` directory:
 $ cp yii2-laradock/env-gigadb yii2-laradock/.env
 ```
 
-Chef-Solo is used to create a number of website source files from templates. The
-values to configure various variables in these template files come from a 
+Chef-Solo is used to create a number of GigaDB source files from templates to 
+configure the running of the website.
+
+:exclamation: To do: Docker should generate these website configuration files
+so that website config values are kept in yii2-laradock directory! Currently,
+configuration values are duplicated in yii2-laradock and chef directories.
+
+The values to configure various variables in these template files come from a 
 `docker.json` file located in the `gigadb-website/chef/environments`
 directory. This file can be created by copying the `docker.json.sample` 
 into a new file called `docker.json`:
@@ -50,14 +56,14 @@ $ vagrant up
 $ vagrant ssh
 ```
 
-If you change directory to `/vagrant/yii2-laradock` in the Ubuntu VM, you can 
-use the [Docker Compose](https://docs.docker.com/compose/) tool to build and 
+If you change directory to `/vagrant/yii2-laradock` in the Ubuntu Docker VM, you
+can use the [Docker Compose](https://docs.docker.com/compose/) tool to build and 
 start the separate containers that can collectively run an instance of GigaDB. 
 This tool relies on a `docker-compose.yml` file which specifies what services 
 are in the GigaDB Docker application.
 ```bash
 $ cd /vagrant/yii2-laradock
-$ docker-compose up -d nginx postgres 
+$ docker-compose up -d nginx postgres fileserver-vsftpd
 ```
 
 If this docker-compose process is successful then the GigaDB website will be 
@@ -69,28 +75,29 @@ All of the project containers in this Dockerised version of GigaDB can be
 listed:
 
 ```bash
-$ docker-compose ps
-             Name                          Command              State                     Ports                  
-  ---------------------------------------------------------------------------------------------------------------
-  yii2laradock_applications_1   /true                           Exit 0                                           
-  yii2laradock_nginx_1          nginx                           Up       0.0.0.0:443->443/tcp, 0.0.0.0:80->80/tcp
-  yii2laradock_php-fpm_1        docker-php-entrypoint php-fpm   Up       9000/tcp                                
-  yii2laradock_postgres_1       docker-entrypoint.sh postgres   Up       0.0.0.0:5432->5432/tcp                  
-  yii2laradock_workspace_1      /sbin/my_init                   Up       0.0.0.0:2222->22/tcp    
+$ docker ps -a
+  CONTAINER ID        IMAGE                              COMMAND                  CREATED             STATUS                         PORTS                                                              NAMES
+  61a3e76ca3ee        yii2laradock_nginx                 "nginx"                  About an hour ago   Up About an hour               0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp                           yii2laradock_nginx_1
+  247012061b8c        yii2laradock_fileserver-vsftpd     "/usr/sbin/run-vsftp…"   About an hour ago   Up About an hour               0.0.0.0:21->21/tcp, 20/tcp, 0.0.0.0:21100-21103->21100-21103/tcp   yii2laradock_fileserver-vsftpd_1
+  22316311df25        yii2laradock_php-fpm               "docker-php-entrypoi…"   About an hour ago   Up About an hour               9000/tcp                                                           yii2laradock_php-fpm_1
+  cbee1dde80cb        yii2laradock_workspace             "/sbin/my_init"          About an hour ago   Up About an hour               0.0.0.0:2222->22/tcp                                               yii2laradock_workspace_1
+  f4582c841259        yii2laradock_fileserver-postgres   "docker-entrypoint.s…"   About an hour ago   Up About an hour               5432/tcp, 0.0.0.0:5432->5442/tcp                                   yii2laradock_fileserver-postgres_1
+  8faf6331aa6f        tianon/true                        "/true"                  About an hour ago   Exited (0) About an hour ago                                                                      yii2laradock_applications_1
+  2887afa9e661        yii2laradock_postgres              "docker-entrypoint.s…"   About an hour ago   Up About an hour               0.0.0.0:5400->5432/tcp                                             yii2laradock_postgres_1
 ```
 
-You will see that GigaDB is comprised on 5 containers:
+From the above output, you will see that GigaDB is comprised of a number of 
+containers:
 
- * **yii2laradock_applications_1** is a small container that has finished running,
- hence its exit state. Its role is to point to the gigadb-website directory to
- allow the source code to be used by the other containers.
- * **yii2laradock_nginx_1** provides a container running the NGINX web server.
- * **yii2laradock_php-fpm_1** is a container which runs a FastCGI server for 
- PHP applications. It parses the PHP code and returns a response.
- * **yii2laradock_postgres_1** is the PostgreSQL container which hosts the
- gigadb database that manages the metadata for the data files in GigaDB.
- * **yii2laradock_workspace_1** provides a container that allows you to run
-  artisan and other command line tools when doing development coding for GigaDB.
+| Container  | Function  |
+|---|---|
+| **yii2laradock_applications_1**  | A small container that has finished running, hence its exit state. Its role is to point to the gigadb-website directory to allow the source code to be used by the other containers.  |
+| **yii2laradock_nginx_1**   | Provides a container running the NGINX web server.  |
+| **yii2laradock_php-fpm_1**  | A container which runs a FastCGI server for PHP applications. It parses the PHP code and returns a response.  |
+| **yii2laradock_postgres_1**   | PostgreSQL container which hosts the GigaDB database that manages the metadata for the data files in GigaDB.  |
+| **yii2laradock_workspace_1**  | A container that allows you to run artisan and other command line tools when doing development coding for GigaDB.  |
+| **yii2laradock_fileserver-vsftpd_1** | VSFTPD container that runs a FTP server that allows files to be up and downloaded from a server. |
+| **yii2laradock_fileserver-postgres_1** | Provides a container that hosts a small database containing the FTP users and login details. |
 
 ### Check log for container
 
@@ -98,19 +105,19 @@ You will see that GigaDB is comprised on 5 containers:
 $ docker-compose logs <name of container>
 ```
 
-### Build images
+### Build Docker image
 ```bash
 $ docker-compose build <name of container>
 ```
 
-### Delete containers
+### Delete all Docker containers
 ```bash
 $ docker-compose down -v
 ```
 
-### Log into a  container
+### Log into a container
 ```bash
-$ docker exec -it yii2laradock_nginx_1 bash
+$ docker exec -it <container name> bash
 ```
 
 ### Host access to Docker on Ubuntu VM
@@ -140,7 +147,7 @@ Server:
 
 ```
 
-### pgAdmin
+### Database administration using pgAdmin
 
 The PostgreSQL database can be managed using the pgAdmin tool. This container
 can be deployed using the docker-compose tool:
@@ -160,47 +167,23 @@ Server` and provide a new name, e.g. `gigadb`. Click on the connection tab and
 input the hostname/address as `192.168.42.10`. Use `gigadb ` as the username and
 `vagrant` as the password to access the gigadb postgres database.
 
-## Deploying gigadb-fileserver
-
-A file server provides access to the files managed by GigaDB. A test version of
-this file server can be deployed as a multi-Docker application.
-
-If you have not already created a Ubuntu Docker VM, do this using the 
-`vagrant up` command, SSH into the machine and go to the `yii2-laradock` 
-directory:
-
-```bash
-$ vagrant up
-$ vagrant ssh
-$ cd /vagrant/yii2-laradock
-
-```
-
-Now use the docker-compose tool to deploy the gigadb-fileserver application:
-
-```bash
-$ docker-compose up fileserver-vsftpd
-```
-
-This will create four docker applications:
-
-```
-$ docker ps -a
-CONTAINER ID        IMAGE                              COMMAND                  CREATED             STATUS                      PORTS                        NAMES
-8e8ffa1d4539        yii2laradock_fileserver-vsftpd     "/usr/sbin/run-vsftp…"   20 minutes ago      Up 19 minutes               20/tcp, 0.0.0.0:21->21/tcp   yii2laradock_fileserver-vsftpd_1
-0479f3d7867b        yii2laradock_workspace             "/sbin/my_init"          2 hours ago         Up 2 hours                  0.0.0.0:2222->22/tcp         yii2laradock_workspace_1
-49d09cf94c70        yii2laradock_fileserver-postgres   "docker-entrypoint.s…"   2 hours ago         Up 2 hours                  0.0.0.0:5432->5432/tcp       yii2laradock_fileserver-postgres_1
-ba3f6566e4e2        tianon/true                        "/true"                  2 hours ago         Exited (0) 20 minutes ago                                yii2laradock_applications_1
-```
-
-To log into the VSFTPD server:
+### To log into the VSFTPD server:
 
 ```bash
 $ docker exec -it yii2laradock_fileserver-vsftpd_1 bash
 [root@8e8ffa1d4539 /]# 
 ```
 
-To test anonymous FTP file download:
+### To test anonymous FTP file download using wget:
+
+```bash
+# Make sure you are logged into the Ubuntu Docker VM
+$ vagrant ssh
+# Use wget to download file from FTP server container
+vagrant@vagrant:~$ wget ftp://172.19.0.4/10.5524/100001_101000/100020/readme.txt
+```
+
+### To test anonymous FTP file download using FTP client:
 
 ```bash
 # Find IP address of VSFTPD container using container ID
@@ -229,7 +212,7 @@ ftp> exit
 221 Goodbye.
 ```
 
-Test FTP file upload by user2:
+### Test FTP file upload by user2:
 
 ```bash
 $ ftp 172.19.0.4
@@ -256,7 +239,7 @@ ftp> ls
 ftp> 
 ```
 
-Deleting a container and removing its image:
+### Deleting a container and removing its image:
 
 ```bash
 $ docker stop yii2laradock_fileserver-vsftpd_1
