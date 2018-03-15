@@ -24,7 +24,7 @@ def set_hostname(server)
   server.vm.provision 'shell', inline: "hostname #{server.vm.hostname}"
 end
 
-if ENV['GIGADB_BOX'] == 'docker'  # Install gigadb-website as Docker app
+if ENV['GIGADB_BOX'] == 'docker'  # Install gigadb-website as Docker app on Ubuntu VM
   Vagrant.configure("2") do |docker|
     docker.vm.box = "gigasci/ubuntu-16.04-amd64.box"
     docker.vm.box_version = "2018.01.29"
@@ -35,11 +35,14 @@ if ENV['GIGADB_BOX'] == 'docker'  # Install gigadb-website as Docker app
     # Allocate IP address to Ubuntu VM
     docker.vm.network "private_network", ip: "192.168.42.10"
 
-    # Required Yii folders
+    # Folders required by Yii
     FileUtils.mkpath("./protected/runtime")
     FileUtils.chmod_R 0777, ["./protected/runtime"]
     FileUtils.mkpath("./assets")
     FileUtils.chmod_R 0777, ["./assets"]
+
+    # Run script to download Yii and generate config files in VM
+    docker.vm.provision "shell", path: "./yii2-laradock/generate_config.sh"
 
     # Enable docker daemon access from host on port 9172 forwarded to port 2376
     # in container
@@ -58,28 +61,8 @@ if ENV['GIGADB_BOX'] == 'docker'  # Install gigadb-website as Docker app
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
       v.customize ["modifyvm", :id, "--memory", "2048"]
     end
-
-    # Enable provisioning with chef solo
-    docker.vm.provision :chef_solo do |chef|
-      chef.cookbooks_path = [
-        "chef/site-cookbooks",
-        "chef/chef-cookbooks",
-      ]
-      chef.environments_path = 'chef/environments'
-
-      ################################
-      #### Set server environment ####
-      ################################
-      chef.environment = "docker"
-
-      # Add Chef recipe
-      chef.add_recipe "docker"
-
-      # Additional chef settings to put in solo.rb
-      chef.custom_config_path = "Vagrantfile.chef"
-    end
   end
-else  # Install gigadb-website on VM or AWS
+else  # Install gigadb-website directly on VM or AWS
   Vagrant.configure(2) do |config|
     # Cache packages to reduce provisioning time
     if Vagrant.has_plugin?("vagrant-cachier")

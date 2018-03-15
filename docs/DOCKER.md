@@ -30,22 +30,6 @@ Now create a docker-compose configuration file in the `yii2-laradock` directory:
 $ cp yii2-laradock/env-gigadb yii2-laradock/.env
 ```
 
-Chef-Solo is used to create a number of GigaDB source files from templates to 
-configure the running of the website.
-
-:exclamation: To do: Docker should generate these website configuration files
-so that website config values are kept in yii2-laradock directory! Currently,
-configuration values are duplicated in yii2-laradock and chef directories.
-
-The values to configure various variables in these template files come from a 
-`docker.json` file located in the `gigadb-website/chef/environments`
-directory. This file can be created by copying the `docker.json.sample` 
-into a new file called `docker.json`:
-
-```bash
-cp chef/environments/docker.json.sample chef/environments/docker.json
-```
-
 Vagrant can now be used to spin up an Ubuntu VM with Docker installed and with 
 the `gigadb-website` repository folder synchronised at `/vagrant`:
 ```bash
@@ -53,6 +37,10 @@ $ vagrant up
 # Log into Ubuntu VM
 $ vagrant ssh
 ```
+
+As part of the VM creation process, it will generate the config files required
+by gigadb-website and download the Yii version 1 framework for use by the 
+containers.
 
 If you change directory to `/vagrant/yii2-laradock` in the Ubuntu Docker VM, you
 can use the [Docker Compose](https://docs.docker.com/compose/) tool to build and 
