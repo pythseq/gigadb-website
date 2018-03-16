@@ -10,10 +10,21 @@ framework created by [Mahmoud Zalt](https://github.com/Mahmoudz).
 
 ### Procedure
 
-After you have `git clone https://github.com/gigascience/gigadb-website.git`, 
-you will have downloaded the `gigadb-website` repository. The next step is to 
-download the GigaDB-specific Laradock project into the gigadb-website repo as a 
-sub-module:
+To begin deploying gigadb-website as Docker application, you will need to set
+the `GIGADB_BOX` environment variable to `docker`. This can be declared in your
+`~/.bash_profile` (you will then need to `source` this file) or executing the 
+command below on your command-line:
+```bash
+export GIGADB_BOX='docker'
+```
+
+In your working directory, download the GigaDB source code:
+```bash
+git clone https://github.com/gigascience/gigadb-website.git
+```
+
+The next step is to download the GigaDB-specific Laradock project into the 
+gigadb-website repo as a sub-module:
 ```bash
 # Change directory into repository
 $ cd gigadb-website
