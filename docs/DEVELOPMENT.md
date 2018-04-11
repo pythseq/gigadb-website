@@ -138,6 +138,26 @@ $ cd /vagrant/sql
 $ pg_dump -U gigadb -h localhost -W -F plain gigadb > backup.sql
 ```
 
+In addition, you may need to import different data into the database for
+testing purposes. This is done as follows:
+
+```bash
+# Log into gigadb-website
+$ vagrant ssh
+# Change directory to where your sql file is located, e.g.
+$ cd /vagrant/sql
+# Use vagrant as password when logging into database with postgresql client
+$ psql -U postgres -h localhost -W
+# Remove current database and create new one
+postgres=# drop database gigadb;
+postgres=# create database gigadb;
+postgres=# alter user gigadb with superuser;
+# Log out of psql client
+postgres=# \q
+# Load data from sql file
+$ psql -h 127.0.0.1 -d gigadb -U gigadb -f <name of sql file>
+```
+
 ### Database operation using pgAdmin3
 
 The pgAdmin3 GUI client for PostgreSQL databases can be used to

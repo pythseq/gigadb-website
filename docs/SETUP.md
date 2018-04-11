@@ -1,12 +1,12 @@
 # SETUP for new functionalities
 
-ftp directories [#63](https://github.com/gigascience/gigadb-website/issues/63), multi-download [#67](https://github.com/gigascience/gigadb-website/issues/67) and file preview [#66](https://github.com/gigascience/gigadb-website/issues/66)
+FTP directories [#63](https://github.com/gigascience/gigadb-website/issues/63), multi-download [#67](https://github.com/gigascience/gigadb-website/issues/67) and file preview [#66](https://github.com/gigascience/gigadb-website/issues/66)
 
 System Architecture :
 [https://gist.githubusercontent.com/rija/f6fa3cfeda0f0a0da4c6f08326bbe6f7/raw/d882eddfb1028b07eaabbc6a5b264af78890921a/gistfile1.txt]
 
 
-## (0) check out the ftp-table branch
+## (0) Check out the ftp-table branch
 
 ```
 $ git clone https://github.com/rija/gigadb-website
@@ -18,14 +18,14 @@ $ git submodule update
 $ ..
 ```
 
-## (1) Copy development.json.sample to development.json
+## (1) Copy `development.json.sample` to `development.json`
 
-review or change the information in  the "ftp", "mfr", "aws", and "supervisor" blocks
+Review or change the information in the "ftp", "mfr", "aws", and "supervisor" blocks.
 
 
 ### (1.1) FTP
 
-to use the ftp server on the ftp-server vagrant box, use the following values:
+To use the FTP server on the ftp-server vagrant box, use the following values:
 
 ```
 "ftp": {
@@ -34,11 +34,11 @@ to use the ftp server on the ftp-server vagrant box, use the following values:
 },
 ```
 
-otherwise to connect to the live ftp server, use:
+Otherwise to connect to the live ftp server, use:
 ```
 "ftp": {
-  "connection_url": "ftp://anonymous:anonymous@climb.genomics.cn:21"
-  "host": "climb.genomics.cn"
+  "connection_url": "ftp://anonymous:anonymous@penguin.genomics.cn:21"
+  "host": "penguin.genomics.cn"
 },
 ```
 
@@ -64,14 +64,21 @@ The ftp-server vagrant box needs users information to be filled in in the develo
 
 ```
 
-
 ### (1.2) MFR
 
-this is where you indicate the url of the preview server from
-Center For Open Science: Modular-File-Renderer a.k.a MFR.
-The default value is of a remote test server.
-For testing purpose, there is no need to change this value.
-Later on in the configuration process you will need to supply me with the bucket name created so I can whitelist them on this server.
+MFR is a python web application that renders (as HTML and PDF) the content of 
+files stored in a remote server in an iframe. MFR does not support FTP so it 
+fetches a file via HTTP from S3 and renders this file. Support for a particular 
+file format has to to be coded but lots of formats supported, e.g. images, 
+video, tabular and scientific formats. Until supported, this means that formats 
+such as FASTA/FASTQ are not rendered by MFR. These files might be supported by 
+MFR if it is annotated as a plain/text type.
+
+To configure MFR, you need to indicate the URL of the preview server from Center
+For Open Science: Modular-File-Renderer a.k.a MFR. The default value is of a 
+remote test server. For testing purpose, there is no need to change this value.
+Later on in the configuration process you will need to supply me with the bucket
+name created so I can whitelist them on this server.
 
 ```
   "mfr": {
@@ -92,33 +99,54 @@ Later on in the configuration process you will need to supply me with the bucket
 },
 ```
 
-Firstly, add the Access key and Secret id of an AWS user that can fully manage S3 resources.
+Firstly, add the Access key and Secret ID of an AWS user that can fully manage 
+S3 resources.
 
-The __s3_bucket_for_file_previews__ bucket is where the preview file are uploaded before they are shown in a preview pane (directly or indirectly through MFR) to the web visitors.
+The __s3_bucket_for_file_previews__ bucket is where the preview files are 
+uploaded before they are shown in a preview pane (directly or indirectly through 
+MFR) to the web visitors.
 
 ### (1.4) Supervisor
 
-The new functionalities will work without changing the default values for this block.
-However, on production, it's recommended to increase the value of the ``numprocs`` key to greater than one.
+The new functionalities will work without changing the default values for this 
+block. However, on production, it's recommended to increase the value of the 
+`numprocs` key to greater than one.
 
+The supervisor service runs on the FTP server. When it receives a message that
+the user has clicked on a preview icon, it executes a function to create a
+preview file which is sent to the S3 bucket.
+
+The following commands can be used to check the status of supervisor and 
+start/stop the process:
+
+```bash
+$ /etc/init.d/supervisord status
+$ /etc/init.d/supervisord stop
+$ /etc/init.d/supervisord start
+```
+
+A log file detailing the creation of preview file is available at:
+
+/var/log/generatepreview.log
 
 ## (2) Run and provision vagrant images
 
-Vagrantfile now configures **3 machines**.
-make sure the following environment variable are set:
+Vagrantfile now configures **3 machines**. Make sure the following environment 
+variables are set:
 ```
 DEPLOY_GIGADB_FTP=true
 DEPLOY_GIGADB_QUEUES=true
 GIGADB_BOX=centos
 ```
 
-if running on Mac OS X, and wants to connect to the ftp-server vagrant box, the following would help too:
+If running on Mac OS X, and wants to connect to the ftp-server vagrant box, the 
+following would help too:
 
 ```
 GIGADB_ON_MACOSX=true
 ```
 
-then run
+Then run:
 ```
 $ vagrant up
 ```
@@ -130,7 +158,8 @@ $ vagrant ssh gigadb-website
 $ /vagrant/protected/yiic createbucket --fromconfig
 ```
 
-the above command will create the one bucket with the name configured in section [1.3].
+The above command will create the one bucket with the name configured in section 
+[1.3].
 
 To delete a bucket and all its content, use the following command:
 
@@ -138,22 +167,37 @@ To delete a bucket and all its content, use the following command:
 $ /vagrant/protected/yiic clearbucket -b=<bucket name> --delete=yes
 ```
 
-## (4) authorising the s3 urls for the preview bucket to MFR
+## (4) Authorising the s3 urls for the preview bucket to MFR
 
-MFR whitelists urls that are allowed to have a preview generated.
+MFR whitelists URLs that are allowed to have a preview generated. So if you've 
+configured the "mfr" block of `development.json` with the default MFR test 
+server, please notify Rija the bucket name you've created for preview so he can 
+add it to the list of allowed domains on the test server.
 
-So if you've configured the "mfr" block of development.json with the default MFR test server, please notify me the bucket name you've created for preview so I can add it to the list of allowed domains on the test server.
+Alternatively, if you have Docker installed (MFR uses Docker for dev/test), you 
+can run the following commands to deploy your own instance of MFR with your own 
+allowed domains:
 
-Alternatively, if you have Docker installed (MFR uses Docker for dev/test), you can run the following commands to deploy your own instance of MFR with your own allowed domains:
-
+```bash
+$ git clone https://github.com/rija/modular-file-renderer
+$ cd modular-file-renderer
+$ git checkout -b circus-dockerfile origin/circus-dockerfile
 ```
- $ git clone https://github.com/rija/modular-file-renderer
- $ cd modular-file-renderer
- $ git checkout -b circus-dockerfile origin/circus-dockerfile
 
- $ docker build -t="mfr" .
+On my MacPro 2010 desktop, running Docker applications requires Kitematic which
+is available from  Docker Toolbox. Docker for Mac is not compatible with old Mac
+computers. Starting the Kitematic software will boot up a Kitematic Docker VM
+which can then be used to run the MFR container. Next, use the 
+modular-file-renderer to build it Docker image:
 
- $ docker run -d -p 7778:7778 \
+```bash
+$ eval "$(docker-machine env default)"
+$ docker build -t="mfr" .
+```
+
+Run the image as a container:
+```bash
+$ docker run -d -p 7778:7778 \
     -e SERVER_CONFIG_ADDRESS=0.0.0.0 \
     -e SERVER_CONFIG_PROVIDER_NAME=http \
     -e SERVER_CONFIG_ALLOWED_PROVIDER_DOMAINS=http://www.example.com/  \
@@ -162,20 +206,18 @@ Alternatively, if you have Docker installed (MFR uses Docker for dev/test), you 
 
 ```
 
-where http://www.example.com/ should be replaced by the s3 url:
+`http://www.example.com/` should be replaced by the s3 url:
 ```
 https://<your preview bucket name>.s3.amazonaws.com
 ```
 
-then in the development.json, use __192.168.99.100:7778__ in the "mfr" block (replace 192.168.99.100 by your docker machine ip)
+Then in the `development.json`, use __192.168.99.100:7778__ in the "mfr" block 
+(replace 192.168.99.100 by your docker machine IP address).
 
 ## (5) Testing with the supplied sample data
 
-some of the dataset files for DOI 10.5524/100117
-have been installed on the ftp-server vagrant box.
-
-All the new functionalities can be tested by navigating to the dataset view below using the files shown in the tree further down
-
+All the new functionalities can be tested by navigating to the dataset view 
+below using the files shown in the tree further down:
 
 * http://127.0.0.1:9170/dataset/view/id/100112/
 * http://127.0.0.1:9170/dataset/view/id/100117/
@@ -184,12 +226,14 @@ All the new functionalities can be tested by navigating to the dataset view belo
 * http://127.0.0.1:9170/dataset/view/id/100258/
 * http://127.0.0.1:9170/dataset/view/id/100104/
 
+It's possible to navigate to the other datasets on the database, but the new 
+functionalities won't be working on them if using ftp-server vagrant box. 
+However, old functionalities should still be working on those.
 
-It's possible to navigate to the other datasets on the database, but the new functionalities won't be working on them if using ftp-server vagrant box. However old functionalities should still be working on those.
+__Note__: a production-like database dump may need to be loaded to access the 
+example datasets above.
 
-__Note__: a production-like database dump needs to be loaded to access the example dataset above.
-
-dataset files available on the ftp-server vagrant box:
+Dataset files available on the ftp-server vagrant box:
 ```
 /var/ftp/pub/10.5524/100001_101000/
 ├── 100104
@@ -277,7 +321,5 @@ dataset files available on the ftp-server vagrant box:
     ├── readme.txt
     └── tBLASTx_all
         └── SBdb_CAq.txt  (page 3)
-
-
-
 ```
+
