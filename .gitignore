@@ -64,3 +64,5 @@ sql/temp_command.sql
 # Behat
 Behat/vendor
 
+# For file preview functionality
+modular-file-renderer

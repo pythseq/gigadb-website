@@ -1,7 +1,9 @@
 # install sample data on the ftp server for testing
 
+examples_file = node[:gigadb][:ftp][:examples_file]
+
 remote_file '/tmp/ftpexamples.tar.gz' do
-  source "http://gdbws-ftp-sample-data.s3.amazonaws.com/ftpexamples2.tar.gz"
+  source "#{examples_file}"
 end
 
 bash 'extract_examples' do

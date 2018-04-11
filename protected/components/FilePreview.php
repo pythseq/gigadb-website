@@ -5,5 +5,6 @@ class FilePreview extends CApplicationComponent {
     public $preview_job_queue ; // name of the Beanstalkd job queue for preview creation job
     public $temporary_directory ; //file system location where to download file to preview and where to write generatd preview files
     public $preview_bucket ; // AWS S3 bucket to use for preview files
+    public $region ; // AWS region to create S3 bucket in
 }
  ?>

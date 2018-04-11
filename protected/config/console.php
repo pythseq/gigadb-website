@@ -99,7 +99,7 @@ return CMap::mergeArray(array(
           ),
         'mfr'=>array(
             'class' => 'application.components.ModularFileRenderer',
-            'previewServer' => '128.199.125.190:7778',
+            'previewServer' => '192.168.99.100:7778',
             'supportedExtensions' => $previewConfig['mfr_supported_extensions'],
           ),
         'preview'=>array(

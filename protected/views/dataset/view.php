@@ -1,5 +1,6 @@
 <?php
 
+
 Yii::app()->clientScript->registerScriptFile('/js/eModal.min.js', CClientScript::POS_END);
 Yii::app()->clientScript->registerScriptFile("/js/file-preview.js", CClientScript::POS_END);
 
@@ -420,94 +421,52 @@ HTML;
         <?php } ?>
 
         <div class="clear"></div>
+        <div id="file_table">
+            <?php
+                $aspera = null;
+                if($model->ftp_site){
+                    $aspera = strstr( $model->ftp_site , 'pub/');
+                    if($aspera)
+                        $aspera = 'http://aspera.gigadb.org/?B=' . $aspera;
+                }
 
-        <?php
-            $aspera = null;
-            if($model->ftp_site){
-                $aspera = strstr( $model->ftp_site , 'pub/');
-                if($aspera)
-                    $aspera = 'http://aspera.gigadb.org/?B=' . $aspera;
-            }
+            ?>
+            <h4><?=Yii::t('app' , 'Files:')?> <?= MyHtml::link(Yii::t('app','(FTP site)'),$model->ftp_site,array('target'=>'_blank'))?>
+            <?php $this->renderPartial('_display_setting',array('setting'=>$setting));?>
+            </h4>
+            <?php
+                if ($wants_ftp_table === true ) {
+                    $this->renderPartial('//file/_ftpgrid',array('files'=>$files,
+                                                                'error'=>null,
+                                                                'model'=>$model,
+                                                                'breadcrumbs'=>$breadcrumbs,
+                                                                'multidownload'=>$multidownload,
+                                                                'template'=>$template,
+                                                                'location'=>$location,
+                                                                'setting'=>$setting));
+                }
+                else {
+                    $this->renderPartial('//file/_grid',array('files'=>$files, 'error'=>null, 'multidownload'=>$multidownload,'template'=>$template, 'setting'=>$setting));
+                }
+            ?>
+            <div class="pull-right" id="download_selection">
+                <?php
 
-        ?>
-        <h4><?=Yii::t('app' , 'Files:')?> <?= MyHtml::link(Yii::t('app','(FTP site)'),$model->ftp_site,array('target'=>'_blank'))?>
-        <?php $this->renderPartial('_display_setting',array('setting'=>$setting));?>
-        </h4>
-        <?php
-            $this->widget('zii.widgets.grid.CGridView', array(
-                'id' => 'file-grid',
-                'dataProvider'=>$files,
-                'itemsCssClass'=>'table table-bordered',
-                'template' => $template,
-                'pager' => 'SiteLinkPager',
-                'pagerCssClass' => '',
-                'summaryText' => 'Displaying {start}-{end} of {count} File(s).',
-                'htmlOptions' => array('style'=>'padding-top: 0px'),
-                'columns' => array(
-                    array(
-                        'name' => 'name',
-                        'type' => 'raw',
-                        'value' => '$data->nameHtml',
-                        'visible' => in_array('name', $setting),
-                    ),
-                    array(
-                        'name' => 'description',
-                        'value' => '$data->description',
-                        'visible' => in_array('description', $setting),
-                    ),
-                    array(
-                        'name' => 'sample_name',
-                        'type' => 'raw',
-                        'value' => '$data->getallsample($data->id)',
-                        'visible' => in_array('sample_id', $setting),
-                    ),
-                    array(
-                        'name' => 'type_id',
-                        'value' => '$data->type->name',
-                        'visible' => in_array("type_id", $setting),
-                    ),
-                    array(
-                        'name' => 'format_id',
-                        'value' => '$data->format->name',
-                        'visible' => in_array("format_id", $setting),
-                    ),
-                    array(
-                        'name' => 'size',
-                        'value' => 'File::staticBytesToSize($data->size)',
-                        'visible' => in_array("size", $setting),
-                    ),
-                    array(
-                        'name' => 'date_stamp',
-                        'value' => '$data->date_stamp',
-                        'visible' => in_array("date_stamp", $setting),
-                    ),
-                    array(
-                        'name' => 'attribute',
-                        'type' => 'raw',
-                        'value' => '$data->attrDesc',
-                        'visible' => in_array("attribute", $setting),
-                    ),
-                    array(
-                        'class'=>'CButtonColumn',
-                        'template' => '{download}',
-                        'buttons' => array(
-                            'download' => array(
-                                'label'=>'',
-                                'url' => '$data->location',
-                                'imageUrl' => '',
-                                'options' => array(
-                                    'target' => '_blank',
-                                    'class' => 'download-btn js-download-count',
-                                ),
-                            )
-                        ),
-                        'visible' => in_array("location", $setting),
-                    ),
-
-                ),
-
-            ));
-        ?>
+                    if (true === $multidownload) {
+                        echo MyHtml::ajaxButton(Yii::t('app' , 'Download file selection'),
+                                                            array("/file/downloadSelection"),
+                                                            array('type'=>'POST','dataType'=>'json' ,'data'=>array('dataset_id'=>$model->identifier), 'success'=>"function(response){
+                                if(response.status == 'OK'){
+                                    $('#download_selection').html('Your bundle is being prepared. <a href=\"/file/download/' + response.bid + '\">Click here to download</a>');
+                                    console.log('Your bundle is being prepared. <a href=\"/file/download/' + response.bid + '\">Click here to download</a>');
+                                }else {
+                                    console.log('There was an error in preparing your selection of file to download. Please try again later.');
+                                }
+                            }") ,array('class'=>'span3 btn') );
+                    }
+                ?>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -20,6 +20,8 @@ bash 'Add postgres package repositories' do
 		user 'root'
 		cwd '/tmp'
     code <<-EOH
+        # Delete this when finished!!
+        sudo yum update -y nss curl libcurl
         CHECK_RPM=$(rpm -qa | grep pgdg-centos91)
         if [ "$CHECK_RPM" != "" ]
         then

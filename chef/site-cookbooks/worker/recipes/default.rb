@@ -62,6 +62,14 @@ end
 #### Directory admin ####
 #########################
 
+bash 'Update nss curl and libcurl' do
+    user 'root'
+    cwd '/tmp'
+    code <<-EOH
+        sudo yum update -y nss curl libcurl
+    EOH
+end
+
 yii_framework node[:yii][:version] do
     symlink "#{site_dir}/../yii"
 end
@@ -73,48 +81,48 @@ end
 ####################################
 
 # If provisioning by Chef-Solo, need to manually add SQL file
-directory '/vagrant/sql' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  action :create
-end
-
-cookbook_file '/vagrant/sql/gigadb_testdata.sql' do
-    not_if { ::File.exist?('/vagrant/sql/gigadb_testdata.sql') }
-    source 'sql/gigadb_testdata.sql'
-    owner 'root'
-    group 'root'
-    mode '0755'
-    action :create
-end
-
-# Defined in Vagrantfile - provides database access details
-db = node[:gigadb][:db]
-if db[:host] == 'localhost'
-
-    include_recipe 'postgresql::server'
-    db_user = db[:user]
-
-    postgresql_user db_user do
-        password db[:password]
-    end
-
-    postgresql_database db[:database] do
-        owner db_user
-    end
-
-    bash 'restore gigadb database' do
-        db_user = db[:user]
-        password = db[:password]
-        sql_script = db[:sql_script]
-
-        code <<-EOH
-            # Might need to drop database first or foreign key constraints stop database restoration
-            export PGPASSWORD='#{password}'; psql -U #{db_user} -h localhost gigadb < #{sql_script}
-        EOH
-    end
-end
+# directory '/vagrant/sql' do
+#   owner 'root'
+#   group 'root'
+#   mode '0755'
+#   action :create
+# end
+#
+# cookbook_file '/vagrant/sql/gigadb_testdata.sql' do
+#     not_if { ::File.exist?('/vagrant/sql/gigadb_testdata.sql') }
+#     source 'sql/gigadb_testdata.sql'
+#     owner 'root'
+#     group 'root'
+#     mode '0755'
+#     action :create
+# end
+#
+# # Defined in Vagrantfile - provides database access details
+# db = node[:gigadb][:db]
+# if db[:host] == 'localhost'
+#
+#     include_recipe 'postgresql::server'
+#     db_user = db[:user]
+#
+#     postgresql_user db_user do
+#         password db[:password]
+#     end
+#
+#     postgresql_database db[:database] do
+#         owner db_user
+#     end
+#
+#     bash 'restore gigadb database' do
+#         db_user = db[:user]
+#         password = db[:password]
+#         sql_script = db[:sql_script]
+#
+#         code <<-EOH
+#             # Might need to drop database first or foreign key constraints stop database restoration
+#             export PGPASSWORD='#{password}'; psql -U #{db_user} -h localhost gigadb < #{sql_script}
+#         EOH
+#     end
+# end
 
 
 ###############################################################
@@ -277,7 +285,8 @@ end
 ##############
 #### Less ####
 ##############
-
+# npm does not support its self-signed certificates - tell it to use known registrars
+execute 'npm config set ca ""'
 # Compile less files
 execute 'npm install -g less'
 if node[:gigadb_box] == 'aws'

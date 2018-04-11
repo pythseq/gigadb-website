@@ -49,6 +49,15 @@ end
 #### Directory admin ####
 #########################
 
+# Delete this when finished!!
+bash 'Update nss curl and libcurl' do
+    user 'root'
+    cwd '/tmp'
+    code <<-EOH
+        sudo yum update -y nss curl libcurl
+    EOH
+end
+
 yii_framework node[:yii][:version] do
     symlink "#{site_dir}/../yii"
 end
@@ -71,6 +80,8 @@ end
 #### Set up PostgreSQL database ####
 ####################################
 
+test_data_sql_file = node[:gigadb][:db][:sql_script]
+
 # If provisioning by Chef-Solo, need to manually add SQL file
 directory '/vagrant/sql' do
   owner 'root'
@@ -79,9 +90,9 @@ directory '/vagrant/sql' do
   action :create
 end
 
-cookbook_file '/vagrant/sql/gigadb_testdata.sql' do
-    not_if { ::File.exist?('/vagrant/sql/gigadb_testdata.sql') }
-    source 'sql/gigadb_testdata.sql'
+cookbook_file "/vagrant/#{test_data_sql_file}" do
+    not_if { ::File.exist?("/vagrant/#{test_data_sql_file}") }
+    source "#{test_data_sql_file}"
     owner 'root'
     group 'root'
     mode '0755'
@@ -110,7 +121,7 @@ if db[:host] == 'localhost'
 
         code <<-EOH
             # Might need to drop database first or foreign key constraints stop database restoration
-            export PGPASSWORD='#{password}'; psql -U #{db_user} -h localhost gigadb < #{sql_script}
+            export PGPASSWORD='#{password}'; psql -U #{db_user} -h localhost gigadb < /vagrant/#{sql_script}
         EOH
     end
 end
@@ -330,6 +341,8 @@ end
 #### Less ####
 ##############
 
+# npm does not support its self-signed certificates - tell it to use known registrars
+execute 'npm config set ca ""'
 # Compile less files
 execute 'npm install -g less'
 if node[:gigadb_box] == 'aws'

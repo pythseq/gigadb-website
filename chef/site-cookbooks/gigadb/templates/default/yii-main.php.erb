@@ -87,16 +87,17 @@ return CMap::mergeArray(array(
             'schemaCachingDuration'=>30
         ),
         'ftp' => array(
-			'class' => 'ext.GFtp.GFtpApplicationComponent',
-			'connectionString' => '<%= node[:gigadb][:ftp][:connection_url] %>',
-			'timeout' => 120,
-			'passive' => true
-		),
+            'class' => 'ext.GFtp.GFtpApplicationComponent',
+            'connectionString' => '<%= node[:gigadb][:ftp][:connection_url] %>',
+            'timeout' => 120,
+            'passive' => true
+        ),
         'aws'=>array(
             'class' => 'application.components.AwsYiiConfig',
             'access_key' => $awsConfig['access_key'],
             'secret_key' => $awsConfig['secret_key'],
             'preview_bucket' => $awsConfig['s3_bucket_for_file_previews'],
+            'region' => $awsConfig['region'],
           ),
         'mfr'=>array(
             'class' => 'application.components.ModularFileRenderer',
@@ -109,6 +110,7 @@ return CMap::mergeArray(array(
             'preview_job_queue' => 'previewgeneration',
             'temporary_directory' => '/tmp/previews',
             'preview_bucket' => $awsConfig['s3_bucket_for_file_previews'],
+            'region' => $awsConfig['region'],
         ),
         'multidownload'=>array(
             'class' => 'application.components.MultiDownload',
