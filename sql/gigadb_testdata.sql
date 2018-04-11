@@ -4,10 +4,23 @@
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
-SET standard_conforming_strings = off;
+SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET escape_string_warning = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
 
 SET search_path = public, pg_catalog;
 
@@ -87,8 +100,8 @@ COMMENT ON COLUMN alternative_identifiers.id IS '
 CREATE SEQUENCE alternative_identifiers_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -99,13 +112,6 @@ ALTER TABLE public.alternative_identifiers_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE alternative_identifiers_id_seq OWNED BY alternative_identifiers.id;
-
-
---
--- Name: alternative_identifiers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('alternative_identifiers_id_seq', 1, false);
 
 
 --
@@ -135,8 +141,8 @@ ALTER TABLE public.attribute OWNER TO gigadb;
 CREATE SEQUENCE attribute_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -147,13 +153,6 @@ ALTER TABLE public.attribute_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE attribute_id_seq OWNED BY attribute.id;
-
-
---
--- Name: attribute_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('attribute_id_seq', 422, true);
 
 
 --
@@ -179,8 +178,8 @@ ALTER TABLE public.author OWNER TO gigadb;
 CREATE SEQUENCE author_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -191,13 +190,6 @@ ALTER TABLE public.author_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE author_id_seq OWNED BY author.id;
-
-
---
--- Name: author_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('author_id_seq', 3809, true);
 
 
 --
@@ -250,8 +242,8 @@ ALTER TABLE public.dataset_attributes OWNER TO gigadb;
 CREATE SEQUENCE dataset_attributes_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -262,13 +254,6 @@ ALTER TABLE public.dataset_attributes_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE dataset_attributes_id_seq OWNED BY dataset_attributes.id;
-
-
---
--- Name: dataset_attributes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('dataset_attributes_id_seq', 35, true);
 
 
 --
@@ -294,8 +279,8 @@ ALTER TABLE public.dataset_author OWNER TO gigadb;
 CREATE SEQUENCE dataset_author_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -306,13 +291,6 @@ ALTER TABLE public.dataset_author_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE dataset_author_id_seq OWNED BY dataset_author.id;
-
-
---
--- Name: dataset_author_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('dataset_author_id_seq', 3492, true);
 
 
 --
@@ -338,8 +316,8 @@ ALTER TABLE public.dataset_funder OWNER TO gigadb;
 CREATE SEQUENCE dataset_funder_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -353,21 +331,14 @@ ALTER SEQUENCE dataset_funder_id_seq OWNED BY dataset_funder.id;
 
 
 --
--- Name: dataset_funder_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('dataset_funder_id_seq', 31, true);
-
-
---
 -- Name: dataset_id_seq; Type: SEQUENCE; Schema: public; Owner: gigadb
 --
 
 CREATE SEQUENCE dataset_id_seq
     START WITH 33
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -378,13 +349,6 @@ ALTER TABLE public.dataset_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE dataset_id_seq OWNED BY dataset.id;
-
-
---
--- Name: dataset_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('dataset_id_seq', 213, true);
 
 
 --
@@ -411,8 +375,8 @@ ALTER TABLE public.dataset_log OWNER TO gigadb;
 CREATE SEQUENCE dataset_log_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -423,13 +387,6 @@ ALTER TABLE public.dataset_log_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE dataset_log_id_seq OWNED BY dataset_log.id;
-
-
---
--- Name: dataset_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('dataset_log_id_seq', 119, true);
 
 
 --
@@ -452,8 +409,8 @@ ALTER TABLE public.dataset_project OWNER TO gigadb;
 CREATE SEQUENCE dataset_project_id_seq
     START WITH 7
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -464,13 +421,6 @@ ALTER TABLE public.dataset_project_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE dataset_project_id_seq OWNED BY dataset_project.id;
-
-
---
--- Name: dataset_project_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('dataset_project_id_seq', 127, true);
 
 
 --
@@ -493,8 +443,8 @@ ALTER TABLE public.dataset_sample OWNER TO gigadb;
 CREATE SEQUENCE dataset_sample_id_seq
     START WITH 211
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -505,13 +455,6 @@ ALTER TABLE public.dataset_sample_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE dataset_sample_id_seq OWNED BY dataset_sample.id;
-
-
---
--- Name: dataset_sample_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('dataset_sample_id_seq', 4355, true);
 
 
 --
@@ -543,8 +486,8 @@ ALTER TABLE public.dataset_session OWNER TO gigadb;
 CREATE SEQUENCE dataset_session_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -555,13 +498,6 @@ ALTER TABLE public.dataset_session_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE dataset_session_id_seq OWNED BY dataset_session.id;
-
-
---
--- Name: dataset_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('dataset_session_id_seq', 26, true);
 
 
 --
@@ -584,8 +520,8 @@ ALTER TABLE public.dataset_type OWNER TO gigadb;
 CREATE SEQUENCE dataset_type_id_seq
     START WITH 37
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -596,13 +532,6 @@ ALTER TABLE public.dataset_type_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE dataset_type_id_seq OWNED BY dataset_type.id;
-
-
---
--- Name: dataset_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('dataset_type_id_seq', 258, true);
 
 
 --
@@ -627,8 +556,8 @@ ALTER TABLE public.exp_attributes OWNER TO gigadb;
 CREATE SEQUENCE exp_attributes_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -639,13 +568,6 @@ ALTER TABLE public.exp_attributes_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE exp_attributes_id_seq OWNED BY exp_attributes.id;
-
-
---
--- Name: exp_attributes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('exp_attributes_id_seq', 5, true);
 
 
 --
@@ -671,8 +593,8 @@ ALTER TABLE public.experiment OWNER TO gigadb;
 CREATE SEQUENCE experiment_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -683,13 +605,6 @@ ALTER TABLE public.experiment_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE experiment_id_seq OWNED BY experiment.id;
-
-
---
--- Name: experiment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('experiment_id_seq', 3, true);
 
 
 --
@@ -714,8 +629,8 @@ ALTER TABLE public.extdb OWNER TO gigadb;
 CREATE SEQUENCE extdb_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -726,13 +641,6 @@ ALTER TABLE public.extdb_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE extdb_id_seq OWNED BY extdb.id;
-
-
---
--- Name: extdb_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('extdb_id_seq', 2, true);
 
 
 --
@@ -756,8 +664,8 @@ ALTER TABLE public.external_link OWNER TO gigadb;
 CREATE SEQUENCE external_link_id_seq
     START WITH 17
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -768,13 +676,6 @@ ALTER TABLE public.external_link_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE external_link_id_seq OWNED BY external_link.id;
-
-
---
--- Name: external_link_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('external_link_id_seq', 61, true);
 
 
 --
@@ -796,8 +697,8 @@ ALTER TABLE public.external_link_type OWNER TO gigadb;
 CREATE SEQUENCE external_link_type_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -808,13 +709,6 @@ ALTER TABLE public.external_link_type_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE external_link_type_id_seq OWNED BY external_link_type.id;
-
-
---
--- Name: external_link_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('external_link_type_id_seq', 4, true);
 
 
 --
@@ -863,8 +757,8 @@ ALTER TABLE public.file_attributes OWNER TO gigadb;
 CREATE SEQUENCE file_attributes_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -875,13 +769,6 @@ ALTER TABLE public.file_attributes_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE file_attributes_id_seq OWNED BY file_attributes.id;
-
-
---
--- Name: file_attributes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('file_attributes_id_seq', 2, true);
 
 
 --
@@ -904,8 +791,8 @@ ALTER TABLE public.file_experiment OWNER TO gigadb;
 CREATE SEQUENCE file_experiment_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -916,13 +803,6 @@ ALTER TABLE public.file_experiment_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE file_experiment_id_seq OWNED BY file_experiment.id;
-
-
---
--- Name: file_experiment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('file_experiment_id_seq', 1, true);
 
 
 --
@@ -946,8 +826,8 @@ ALTER TABLE public.file_format OWNER TO gigadb;
 CREATE SEQUENCE file_format_id_seq
     START WITH 26
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -961,21 +841,14 @@ ALTER SEQUENCE file_format_id_seq OWNED BY file_format.id;
 
 
 --
--- Name: file_format_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('file_format_id_seq', 45, true);
-
-
---
 -- Name: file_id_seq; Type: SEQUENCE; Schema: public; Owner: gigadb
 --
 
 CREATE SEQUENCE file_id_seq
     START WITH 6716
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -986,13 +859,6 @@ ALTER TABLE public.file_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE file_id_seq OWNED BY file.id;
-
-
---
--- Name: file_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('file_id_seq', 88270, true);
 
 
 --
@@ -1016,8 +882,8 @@ ALTER TABLE public.file_relationship OWNER TO gigadb;
 CREATE SEQUENCE file_relationship_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1028,13 +894,6 @@ ALTER TABLE public.file_relationship_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE file_relationship_id_seq OWNED BY file_relationship.id;
-
-
---
--- Name: file_relationship_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('file_relationship_id_seq', 4, true);
 
 
 --
@@ -1057,8 +916,8 @@ ALTER TABLE public.file_sample OWNER TO gigadb;
 CREATE SEQUENCE file_sample_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1069,13 +928,6 @@ ALTER TABLE public.file_sample_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE file_sample_id_seq OWNED BY file_sample.id;
-
-
---
--- Name: file_sample_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('file_sample_id_seq', 18935, true);
 
 
 --
@@ -1099,8 +951,8 @@ ALTER TABLE public.file_type OWNER TO gigadb;
 CREATE SEQUENCE file_type_id_seq
     START WITH 15
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1111,13 +963,6 @@ ALTER TABLE public.file_type_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE file_type_id_seq OWNED BY file_type.id;
-
-
---
--- Name: file_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('file_type_id_seq', 119, true);
 
 
 --
@@ -1141,8 +986,8 @@ ALTER TABLE public.funder_name OWNER TO gigadb;
 CREATE SEQUENCE funder_name_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1153,13 +998,6 @@ ALTER TABLE public.funder_name_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE funder_name_id_seq OWNED BY funder_name.id;
-
-
---
--- Name: funder_name_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('funder_name_id_seq', 6171, true);
 
 
 --
@@ -1196,8 +1034,8 @@ ALTER TABLE public.gigadb_user OWNER TO gigadb;
 CREATE SEQUENCE gigadb_user_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1208,13 +1046,6 @@ ALTER TABLE public.gigadb_user_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE gigadb_user_id_seq OWNED BY gigadb_user.id;
-
-
---
--- Name: gigadb_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('gigadb_user_id_seq', 345, true);
 
 
 --
@@ -1241,8 +1072,8 @@ ALTER TABLE public.image OWNER TO gigadb;
 CREATE SEQUENCE image_id_seq
     START WITH 31
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1253,13 +1084,6 @@ ALTER TABLE public.image_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE image_id_seq OWNED BY image.id;
-
-
---
--- Name: image_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('image_id_seq', 225, true);
 
 
 --
@@ -1284,8 +1108,8 @@ ALTER TABLE public.link OWNER TO gigadb;
 CREATE SEQUENCE link_id_seq
     START WITH 66
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1299,32 +1123,18 @@ ALTER SEQUENCE link_id_seq OWNED BY link.id;
 
 
 --
--- Name: link_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('link_id_seq', 294, true);
-
-
---
 -- Name: link_prefix_id_seq; Type: SEQUENCE; Schema: public; Owner: gigadb
 --
 
 CREATE SEQUENCE link_prefix_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
 ALTER TABLE public.link_prefix_id_seq OWNER TO gigadb;
-
---
--- Name: link_prefix_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('link_prefix_id_seq', 46, true);
-
 
 --
 -- Name: manuscript; Type: TABLE; Schema: public; Owner: gigadb; Tablespace: 
@@ -1347,8 +1157,8 @@ ALTER TABLE public.manuscript OWNER TO gigadb;
 CREATE SEQUENCE manuscript_id_seq
     START WITH 27
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1359,13 +1169,6 @@ ALTER TABLE public.manuscript_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE manuscript_id_seq OWNED BY manuscript.id;
-
-
---
--- Name: manuscript_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('manuscript_id_seq', 284, true);
 
 
 --
@@ -1390,8 +1193,8 @@ ALTER TABLE public.news OWNER TO gigadb;
 CREATE SEQUENCE news_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1402,13 +1205,6 @@ ALTER TABLE public.news_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE news_id_seq OWNED BY news.id;
-
-
---
--- Name: news_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('news_id_seq', 3, true);
 
 
 --
@@ -1447,8 +1243,8 @@ ALTER TABLE public.project OWNER TO gigadb;
 CREATE SEQUENCE project_id_seq
     START WITH 7
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1459,13 +1255,6 @@ ALTER TABLE public.project_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE project_id_seq OWNED BY project.id;
-
-
---
--- Name: project_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('project_id_seq', 17, true);
 
 
 --
@@ -1488,8 +1277,8 @@ ALTER TABLE public.publisher OWNER TO gigadb;
 CREATE SEQUENCE publisher_id_seq
     START WITH 3
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1500,13 +1289,6 @@ ALTER TABLE public.publisher_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE publisher_id_seq OWNED BY publisher.id;
-
-
---
--- Name: publisher_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('publisher_id_seq', 4, true);
 
 
 --
@@ -1530,8 +1312,8 @@ ALTER TABLE public.relation OWNER TO gigadb;
 CREATE SEQUENCE relation_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1542,13 +1324,6 @@ ALTER TABLE public.relation_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE relation_id_seq OWNED BY relation.id;
-
-
---
--- Name: relation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('relation_id_seq', 84, true);
 
 
 --
@@ -1570,8 +1345,8 @@ ALTER TABLE public.relationship OWNER TO gigadb;
 CREATE SEQUENCE relationship_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1582,13 +1357,6 @@ ALTER TABLE public.relationship_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE relationship_id_seq OWNED BY relationship.id;
-
-
---
--- Name: relationship_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('relationship_id_seq', 22, true);
 
 
 --
@@ -1611,8 +1379,8 @@ ALTER TABLE public.rss_message OWNER TO gigadb;
 CREATE SEQUENCE rss_message_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1623,13 +1391,6 @@ ALTER TABLE public.rss_message_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE rss_message_id_seq OWNED BY rss_message.id;
-
-
---
--- Name: rss_message_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('rss_message_id_seq', 2, true);
 
 
 --
@@ -1673,8 +1434,8 @@ ALTER TABLE public.sample_attribute OWNER TO gigadb;
 CREATE SEQUENCE sample_attribute_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1685,13 +1446,6 @@ ALTER TABLE public.sample_attribute_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE sample_attribute_id_seq OWNED BY sample_attribute.id;
-
-
---
--- Name: sample_attribute_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('sample_attribute_id_seq', 30060, true);
 
 
 --
@@ -1714,8 +1468,8 @@ ALTER TABLE public.sample_experiment OWNER TO gigadb;
 CREATE SEQUENCE sample_experiment_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1729,21 +1483,14 @@ ALTER SEQUENCE sample_experiment_id_seq OWNED BY sample_experiment.id;
 
 
 --
--- Name: sample_experiment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('sample_experiment_id_seq', 2, true);
-
-
---
 -- Name: sample_id_seq; Type: SEQUENCE; Schema: public; Owner: gigadb
 --
 
 CREATE SEQUENCE sample_id_seq
     START WITH 210
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1754,13 +1501,6 @@ ALTER TABLE public.sample_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE sample_id_seq OWNED BY sample.id;
-
-
---
--- Name: sample_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('sample_id_seq', 4347, true);
 
 
 --
@@ -1784,8 +1524,8 @@ ALTER TABLE public.sample_rel OWNER TO gigadb;
 CREATE SEQUENCE sample_rel_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1796,13 +1536,6 @@ ALTER TABLE public.sample_rel_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE sample_rel_id_seq OWNED BY sample_rel.id;
-
-
---
--- Name: sample_rel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('sample_rel_id_seq', 8, true);
 
 
 --
@@ -1841,8 +1574,8 @@ ALTER TABLE public.search OWNER TO gigadb;
 CREATE SEQUENCE search_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1853,13 +1586,6 @@ ALTER TABLE public.search_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE search_id_seq OWNED BY search.id;
-
-
---
--- Name: search_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('search_id_seq', 27, true);
 
 
 --
@@ -1935,8 +1661,8 @@ ALTER TABLE public.species OWNER TO gigadb;
 CREATE SEQUENCE species_id_seq
     START WITH 28
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1947,13 +1673,6 @@ ALTER TABLE public.species_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE species_id_seq OWNED BY species.id;
-
-
---
--- Name: species_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('species_id_seq', 1128856, true);
 
 
 --
@@ -1976,8 +1695,8 @@ ALTER TABLE public.type OWNER TO gigadb;
 CREATE SEQUENCE type_id_seq
     START WITH 6
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1988,13 +1707,6 @@ ALTER TABLE public.type_id_seq OWNER TO gigadb;
 --
 
 ALTER SEQUENCE type_id_seq OWNED BY type.id;
-
-
---
--- Name: type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
---
-
-SELECT pg_catalog.setval('type_id_seq', 26, true);
 
 
 --
@@ -2359,7 +2071,8 @@ COPY "AuthItem" (name, type, description, bizrule, data) FROM stdin;
 --
 
 COPY "YiiSession" (id, expire, data) FROM stdin;
-6jsqqar06qp73kd5lsn5uaona5      	1510721051	
+8lp0qbp9ef52740n0tab907os3      	1522226247	\\x64376331326638376330613462306363363262336232616132313263333365395f5f72657475726e55726c7c733a31363a222f61646d696e46696c652f61646d696e223b64376331326638376330613462306363363262336232616132313263333365395f5f69647c693a3334343b64376331326638376330613462306363363262336232616132313263333365395f5f6e616d657c733a31363a2261646d696e406769676164622e6f7267223b64376331326638376330613462306363363262336232616132313263333365395f69647c693a3334343b6437633132663837633061346230636336326233623261613231326333336539726f6c65737c733a353a2261646d696e223b64376331326638376330613462306363363262336232616132313263333365395f5f7374617465737c613a323a7b733a333a225f6964223b623a313b733a353a22726f6c6573223b623a313b7d
+e7d0nmg77cqpfqaveqinpp4jv1      	1522225414	\\x64376331326638376330613462306363363262336232616132313263333365395f5f69647c693a3334343b64376331326638376330613462306363363262336232616132313263333365395f5f6e616d657c733a31363a2261646d696e406769676164622e6f7267223b64376331326638376330613462306363363262336232616132313263333365395f69647c693a3334343b6437633132663837633061346230636336326233623261613231326333336539726f6c65737c733a353a2261646d696e223b64376331326638376330613462306363363262336232616132313263333365395f5f7374617465737c613a323a7b733a333a225f6964223b623a313b733a353a22726f6c6573223b623a313b7d
 \.
 
 
@@ -2372,6 +2085,13 @@ COPY alternative_identifiers (id, sample_id, extdb_id, extdb_accession) FROM std
 
 
 --
+-- Name: alternative_identifiers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('alternative_identifiers_id_seq', 1, false);
+
+
+--
 -- Data for Name: attribute; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
@@ -2380,6 +2100,13 @@ COPY attribute (id, attribute_name, definition, model, structured_comment_name, 
 497	urltoredirect	\N	\N	urltoredirect	\N	\N	\N	\N	\N
 455	keyword	\N	\N	keywords	\N	\N	\N	\N	\N
 \.
+
+
+--
+-- Name: attribute_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('attribute_id_seq', 422, true);
 
 
 --
@@ -2408,7 +2135,104 @@ COPY author (id, surname, middle_name, first_name, orcid, gigadb_user_id) FROM s
 3807	Vattikuti		S		\N
 3808	Alnasir		J		\N
 3809	Shanahan		H		\N
+3810	Bai		H		\N
+3811	Bayinnamula		B		\N
+3812	Bu		J		\N
+3813	Chang		Y		\N
+3814	Chen		M		\N
+3815	Chen		Y		\N
+3816	Gao		Y		\N
+3817	Guan		B		\N
+3818	Guo		X		\N
+3819	Jirimutu		J		\N
+3820	Lan		T		\N
+3821	Li	\N	T	\N	\N
+3822	Li	\N	W	\N	\N
+3823	Li	\N	W	\N	\N
+3824	Liang	\N	F	\N	\N
+3825	Narisu	\N	N	\N	\N
+3826	Shuangshan	\N	S	\N	\N
+3827	Su	\N	Z	\N	\N
+3828	Suyalatu	\N	S	\N	\N
+3829	Wang	\N	D	\N	\N
+3830	Wu	\N	H	\N	\N
+3831	Xing	\N	Y	\N	\N
+3832	Yang	\N	X	\N	\N
+3833	Yang	\N	X	\N	\N
+3834	Yang	\N	Z	\N	\N
+3835	Zhang	\N	D	\N	\N
+3836	Zhang	\N	Y	\N	\N
+3837	Zhao	\N	X	\N	\N
+3838	Zhu	\N	S	\N	\N
+3839	Feng	\N	Q	\N	\N
+3840	Wang	\N	J	\N	\N
+3841	Yang	\N	H	\N	\N
+3842	Wang	\N	J	\N	\N
+3843	Wu	\N	Q	\N	\N
+3844	Yin	\N	Y	\N	\N
+3845	Zhou	\N	H	\N	\N
+3846	Bolund	\N	L	\N	\N
+3847	Chen	\N	F	\N	\N
+3848	Chen	\N	S	\N	\N
+3849	Du	\N	Y	\N	\N
+3850	Ge	\N	L	\N	\N
+3851	Gong	\N	C	\N	\N
+3852	Gong	\N	F	\N	\N
+3853	Gu	\N	Y	\N	\N
+3854	Jiang	\N	H	\N	\N
+3855	Li	\N	K	\N	\N
+3856	Lu	\N	C	\N	\N
+3857	Lu	\N	G	\N	\N
+3858	Luo	\N	K	\N	\N
+3859	Pan	\N	X	\N	\N
+3860	Tan	\N	Y	\N	\N
+3861	Tan	\N	K	\N	\N
+3862	Vajta	\N	G	\N	\N
+3863	Wang	\N	W	\N	\N
+3864	Xiong	\N	B	\N	\N
+3865	Xu	\N	X	\N	\N
+3866	Yang	\N	H	\N	\N
+3867	Yin	\N	X	\N	\N
+3868	Zhang	\N	X	\N	\N
+3869	Zhang	\N	C	\N	\N
+3870	Zhang	\N	S	\N	\N
+3871	Andersen	U	S	\N	\N
+3872	Blakley	\N	I	\N	\N
+3873	Brown	F	A	\N	\N
+3874	Estrada	D	A	\N	\N
+3875	Gupta	\N	V	\N	\N
+3876	Lila	A	M	\N	\N
+3877	Loraine	E	A	\N	\N
+3878	Meyer	D	M	\N	\N
+3879	Patel	\N	K	\N	\N
+3880	Reid	\N	R	\N	\N
+3881	Behsaz	\N	B	\N	\N
+3882	Birol	\N	I	\N	\N
+3883	Jones	J	S	\N	\N
+3884	Lagman	\N	A	\N	\N
+3885	Vandervalk	P	B	\N	\N
+3886	Warrem	L	R	\N	\N
+3887	Yang	\N	C	\N	\N
+3888	Bunikis	\N	I	\N	\N
+3889	Holmberg	\N	K	\N	\N
+3890	Kaller	\N	M	\N	\N
+3891	Lotstedt	\N	B	\N	\N
+3892	Olsen	\N	R	\N	\N
+3893	Passoth	\N	V	\N	\N
+3894	Pettersson	V	O	\N	\N
+3895	Tiukova	\N	I	\N	\N
+3896	Vezzi	\N	F	\N	\N
+3897	Castle	J	S	\N	\N
+3898	Cowden	C	C	\N	\N
+3899	Tassone	E	E	\N	\N
 \.
+
+
+--
+-- Name: author_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('author_id_seq', 3899, true);
 
 
 --
@@ -2416,10 +2240,16 @@ COPY author (id, surname, middle_name, first_name, orcid, gigadb_user_id) FROM s
 --
 
 COPY dataset (id, submitter_id, image_id, identifier, title, description, dataset_size, ftp_site, upload_status, excelfile, excelfile_md5, publication_date, modification_date, publisher_id, token, fairnuse) FROM stdin;
-210	345	222	100002	Genomic data from Adelie penguin (Pygoscelis adeliae).	The Adelie penguin (Pygoscelis adeliae) is an iconic penguin of moderate stature and a tuxedo of black and white feathers. The penguins are only found in the Antarctic region and surrounding islands. Being very sensitive to climate change, and due to changes in their behavior based on minor shifts in climate, they are often used as a barometer of the Antarctic. \r\nWith its status as one of the adorable and cuddly flightless birds of Antarctica, they serve as an example for conservation, and as a result they are now categorised at low risk for endangerment. The sequence of the penguin can be of use in understanding the genetic underpinnings of its evolutionary traits and adaptation to its extreme environment; its unique system of feathers; its prowess as a diver; and its sensitivity to climate change. We hope that this genome data will further our understanding of one of the most remarkable creatures to waddle the planet Earth.\r\nWe sequenced the genome of an adult male from Inexpressible Island, Ross Sea, Antartica (provided by David Lambert) to a depth of approximately 60X with short reads from a series of libraries with various insert sizes (200bp- 20kb). The assembled scaffolds of high quality sequences total 1.23 Gb, with the contig and scaffold N50 values of 19 kb and 5 mb respectively. We identified 15,270 protein-coding genes with a mean length of 21.3 kb.	1073741824	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100002	Published	\N	\N	2016-05-09	\N	1	\N	\N
-211	345	223	100003	Genome data from foxtail millet (Setaria italica).	Foxtail millet (Setaria italica) (2n=18), is an annual grass grown both as cereal crop (grain production) and as forage food. It is primarily grown in temperate, subtropical and tropical areas. With approximately 6,000 varieties, millet is one member of the Panicoideae (grasses subfamily), which includes maize (Zea mays), sorghum (Sorghum bicolor), and sugar cane (Saccharum officinarum). It is a nutritious dietary staple, containing starch, proteins, and a number of vitamins and minerals, such as calcium, iron, and sodium. It feeds nearly one-third of the world population with main daily-calories intake, and is especially prevalent in dry climates or soil-poor regions that are not suited for the cultivation of many other crops. Millet is self-pollinating, has a short lifecycle, is small in stature, and has a small genome size; all of these useful attributes make it an invaluable functional genomics model system, and an excellent reference genome to aid in the sequencing of other larger grasses genomes.	314572800	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100003	Published	\N	\N	2011-11-12	\N	1	\N	\N
-212	345	224	100004	Data and software to accompany the paper: Applying compressed sensing to genome-wide association studies.	The aim of a genome-wide association study (GWAS) is to isolate DNA markers for variants affecting phenotypes of interest. Linear regression is employed for this purpose, and in recent years a signal-processing paradigm known as compressed sensing (CS) has coalesced around a particular class of regression techniques. CS is not a method in its own right, but rather a body of theory regarding signal recovery when the number of predictor variables (i.e., genotyped markers) exceeds the sample size. The paper shows the applicability of compressed sensing (CS) theory to genome-wide association studies (GWAS), where the purpose is to ﬁnd trait-associated tagging markers (genetic variants). Analysis scripts are contained in the compressed CS file. Mock data and scripts are found in the compressed GD file. The example scripts found in the CS repository require the GD files to be unpacked in a separate folder. Please look at accompanying readme pdfs for both repositories and annotations in the example scripts before using.	209715200	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100004	Published	\N	\N	2016-05-11	\N	1	\N	\N
-213	345	225	100005	Supporting scripts and data for "Investigation into the annotation of protocol sequencing steps in the Sequence Read Archive".	The workflow for the production of high-throughput sequencing data from nucleic acid samples is complex. There are a series of protocol steps to be followed in the preparation of samples for next-generation sequencing. The quantification of bias in a number of protocol steps, namely DNA fractionation, blunting, phosphorylation, adapter ligation and library enrichment, remains to be determined. We examined the experimental metadata of the public repository Sequence Read Archive (SRA) in order to ascertain the level of annotation of important sequencing steps in submissions to the database.	524288000	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100005	Published	\N	\N	2016-05-11	\N	1	\N	\N
+210	345	222	100006	Genomic data from Adelie penguin (Pygoscelis adeliae).	The Adelie penguin (Pygoscelis adeliae) is an iconic penguin of moderate stature and a tuxedo of black and white feathers. The penguins are only found in the Antarctic region and surrounding islands. Being very sensitive to climate change, and due to changes in their behavior based on minor shifts in climate, they are often used as a barometer of the Antarctic. \r\nWith its status as one of the adorable and cuddly flightless birds of Antarctica, they serve as an example for conservation, and as a result they are now categorised at low risk for endangerment. The sequence of the penguin can be of use in understanding the genetic underpinnings of its evolutionary traits and adaptation to its extreme environment; its unique system of feathers; its prowess as a diver; and its sensitivity to climate change. We hope that this genome data will further our understanding of one of the most remarkable creatures to waddle the planet Earth.\r\nWe sequenced the genome of an adult male from Inexpressible Island, Ross Sea, Antartica (provided by David Lambert) to a depth of approximately 60X with short reads from a series of libraries with various insert sizes (200bp- 20kb). The assembled scaffolds of high quality sequences total 1.23 Gb, with the contig and scaffold N50 values of 19 kb and 5 mb respectively. We identified 15,270 protein-coding genes with a mean length of 21.3 kb.	1073741824	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100006	Published	\N	\N	2016-05-09	\N	1	\N	\N
+213	345	225	100142	Supporting scripts and data for "Investigation into the annotation of protocol sequencing steps in the Sequence Read Archive".	The workflow for the production of high-throughput sequencing data from nucleic acid samples is complex. There are a series of protocol steps to be followed in the preparation of samples for next-generation sequencing. The quantification of bias in a number of protocol steps, namely DNA fractionation, blunting, phosphorylation, adapter ligation and library enrichment, remains to be determined. We examined the experimental metadata of the public repository Sequence Read Archive (SRA) in order to ascertain the level of annotation of important sequencing steps in submissions to the database.	524288000	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100142	Published	\N	\N	2016-05-11	\N	1	\N	\N
+223	345	231	100258	Supporting data for "De novo transcriptome assemblies of four xylem sap-feeding insects"	The four xylem-feeding insects are all vectors of the pytopahogenic bacterium that causes Pierce's disease of grapevines and other crop diseases. Here we have sequenced, de novo assembled, and annotated a comprehensive transcriptome from these four insects. These four transcriptomes represent a significant expansion of data for insect herbivores that feed exclusively on xylem sap, a nutritionally deficient dietary source relative to other plant tissues and fluids. Comparison of transcriptome data with insect herbivores that utilize other dietary sources may illuminate fundamental differences in the biochemistry of dietary specialization.	209715200	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/1000258	Published	\N	\N	2015-12-31	\N	1	\N	\N
+211	345	223	100020	Genome data from foxtail millet (Setaria italica).	Foxtail millet (Setaria italica) (2n=18), is an annual grass grown both as cereal crop (grain production) and as forage food. It is primarily grown in temperate, subtropical and tropical areas. With approximately 6,000 varieties, millet is one member of the Panicoideae (grasses subfamily), which includes maize (Zea mays), sorghum (Sorghum bicolor), and sugar cane (Saccharum officinarum). It is a nutritious dietary staple, containing starch, proteins, and a number of vitamins and minerals, such as calcium, iron, and sodium. It feeds nearly one-third of the world population with main daily-calories intake, and is especially prevalent in dry climates or soil-poor regions that are not suited for the cultivation of many other crops. Millet is self-pollinating, has a short lifecycle, is small in stature, and has a small genome size; all of these useful attributes make it an invaluable functional genomics model system, and an excellent reference genome to aid in the sequencing of other larger grasses genomes.	314572800	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100020	Published	\N	\N	2011-11-12	\N	1	\N	\N
+212	345	224	100094	Data and software to accompany the paper: Applying compressed sensing to genome-wide association studies.	The aim of a genome-wide association study (GWAS) is to isolate DNA markers for variants affecting phenotypes of interest. Linear regression is employed for this purpose, and in recent years a signal-processing paradigm known as compressed sensing (CS) has coalesced around a particular class of regression techniques. CS is not a method in its own right, but rather a body of theory regarding signal recovery when the number of predictor variables (i.e., genotyped markers) exceeds the sample size. The paper shows the applicability of compressed sensing (CS) theory to genome-wide association studies (GWAS), where the purpose is to ﬁnd trait-associated tagging markers (genetic variants). Analysis scripts are contained in the compressed CS file. Mock data and scripts are found in the compressed GD file. The example scripts found in the CS repository require the GD files to be unpacked in a separate folder. Please look at accompanying readme pdfs for both repositories and annotations in the example scripts before using.	209715200	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100094	Published	\N	\N	2016-05-11	\N	1	\N	\N
+222	345	230	100179	Supporting data and materials for the de novo assembly of Dekkera bruxellensis CBS11270 using multiple technologies.	We present a genomic dataset sampled from the yeast Dekkera bruxellensis using three different technologies: Illumina short-read sequencing, PacBio long-read sequencing and optical mapping. The Illumina data consists of four different libraries of differing insert sizes (ie. paired-end fragments and mate-pair libraries), following the ALLPATHS recipe.\r\nThe purpose was to generate a draft genome assembly of high quality by combining these three different and somewhat complementary technologies. As a by-product of our work we present a pipeline for de novo assembly, NouGAT. It is a semi-automated pipeline for read pre-processing, de novo assembly with support of a wide range of assemblers and final assembly evaluation. \r\nThe version of the pipeline hosted here in GigaDB is the version as published (02-Nov-2015), for the most upto date version users are directed to the GitHub repository.	209715200	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100179	Published	\N	\N	2015-11-04	\N	1	\N	\N
+214	345	226	100104	Genome sequence of a Mongolian individual.	We present the genome sequence of a Mongolian male individual. The genome is assembled using short reads produced from the massive parallel sequencing method, resulting in 130.8-fold genome coverage. We identify high-confidence variation sets validated by chip genotyping and PCR-Sanger sequencing, including 3.7 million single nucleotide polymorphisms and 756,234 short insertions and deletions. We assign the paternal inheritance of the individual to the lineage D3a through Y haplogroup analysis and infer Genghis Khan had a common paternal ancestor with Tibeto-Burman populations. We investigate the gene flow between Mongolians and other ethnic groups and demonstrate that the genetic influences on them most likely resulted from the expansion of the Mongol Empire. The Mongolian genome lays a foundation to further understand human evolution and explore population specific genetic causes of diseases/traits in Mongolians and closely related groups.	524288000	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100104	Published	\N	\N	2016-05-11	\N	1	\N	\N
+221	345	229	100159	Software and supporting material for "LINKS: Scalable, alignment-free scaffolding of draft genomes with long reads".	Owing to the complexity of the assembly problem, we do not yet have complete genome sequences. The difficulty in assembling reads into finished genomes is exacerbated by sequence repeats and the inability of short reads to capture sufficient genomic information to resolve those problematic regions. In this regard, established and emerging long read technologies show great promise, but their current associated higher error rates typically require computational base correction and/or additional bioinformatics pre-processing before they can be of value. We present LINKS, the Long Interval Nucleotide K-mer Scaffolder algorithm, a method that makes use of the sequence properties of nanopore sequence data and other error-containing sequence data, to scaffold high-quality genome assemblies, without the need for read alignment or base correction. Here, we show how the contiguity of an ABySS Escherichia coli K-12 genome assembly can be increased greater than five-fold by the use of beta-released Oxford Nanopore Technologies Ltd. long reads and how LINKS leverages long-range information in Saccharomyces cerevisiae W303 nanopore reads to yield assemblies whose resulting contiguity and correctness are on par with or better than that of competing applications. We also present the re-scaffolding of the colossal white spruce (Picea glauca) draft assembly (PG29, 20 Gbp) and demonstrate how LINKS scales to larger genomes.	209715200	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100159	Published	\N	\N	2015-08-04	\N	1	\N	\N
+220	345	228	100117	RNA-Seq analysis and annotation of a draft blueberry genome assembly.	Blueberries are a popular and commercially important fruit, rich in antioxidants and other beneficial compounds that can protect against disease. To understand and identify genes involved in synthesis of bioactive compounds that could enable breeding berry varieties with enhanced health benefits, a draft blueberry genome assembly was produced using RNA-Seq data from five stages of berry fruit development and ripening. Libraries were prepared from samples of green and ripe fruit from plants of the O’Neal variety of southern highbush blueberry (Vaccinium corymbosum). Genome-guided assembly of RNA-Seq read alignments combined with output from ab initio gene finders produced around 60,000 gene models, of which more than half were similar to proteins from other species, typically the grape Vitis vinifera. Homology-based annotation using Blast2GO and InterPro assigned Gene Ontology terms to around 15,000 genes. \r\nAll sequence data are available in the Short Read Archive under accessions SRP039977 and SRP039971. Files containing alignments, RNA-Seq coverage graphs, and output from TopHat2 are also available from a publicly accessible IGBQuickLoad site configured to serve data for visualization in Integrated Genome Browser (see:http://www.igbquickload.org/blueberry). RNA-Seq data are freely available for visualization in Integrated Genome Browser. Archives of Visualization of read alignments, gene models, GeneModelAnalysis, counts file of numbers of single-mapping reads for each annotated blueberry gene, differentially expressed genes, Gene Ontology categories and Blastx Analysis files are available for download here. A snapshot of the R Markdown files, python scripts, and shell scripts used in data analysis and data processing are archived here as a set of static files representing those as publlished. For the current up-to-date scripts please visit the BitBucket repository.	209715200	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100117	Published	\N	\N	2015-01-30	\N	1	\N	\N
+217	345	227	100112	Supporting materials for: "Clinical outcome of preimplantation genetic diagnosis and screening using next generation sequencing".	A total of 395 couples were subjected to IVF-PGD treatment, including 129 couples with NGS-based test and 266 couples with SNP array based test for the detection of embryonic chromosomal abnormalities. The NGS test was performed using low coverage whole genome sequencing with HiSeq 2000 platform. And the SNP array test was using Affymetrix Gene Chip Mapping Nsp I 262K. The average age of patients was 32.1 years (age range 20-44 years). \r\n\r\nDue to the sensitive nature of this dataset it is being hosted in the secure restricted access database European Genome-Phenome Archive at the EBI. It has been assigned the accession number EGAD00001001037. \r\nTo gain access to this dataset you will need to apply for permission from the CITIC Xiangya Hospital and BGI PGD/PGS Data Access Committee (DAC). \r\nThere are two forms available to download from GigaDB FTP server (below), both should be completed and emailed to Dr Yueqiu Tan, who is the named representative of the CITIC Xiangya Hospital and BGI PGD/PGS DAC. \r\nAfter sending the forms to the DAC you will be contacted either by the DAC to decline your application or from the EGA with login details if your application is approved. This process can take several days.	1073741824	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100112	Published	\N	\N	2014-12-01	\N	1	\N	\N
 \.
 
 
@@ -2428,30 +2258,143 @@ COPY dataset (id, submitter_id, image_id, identifier, title, description, datase
 --
 
 COPY dataset_attributes (id, dataset_id, attribute_id, value, units_id, image_id, until_date) FROM stdin;
+36	214	497		\N	\N	\N
+37	214	497		\N	\N	\N
+38	217	497		\N	\N	\N
+39	217	497		\N	\N	\N
+40	214	497		\N	\N	\N
+41	220	497		\N	\N	\N
+42	221	497		\N	\N	\N
+43	222	497		\N	\N	\N
+44	223	497		\N	\N	\N
 \.
+
+
+--
+-- Name: dataset_attributes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('dataset_attributes_id_seq', 44, true);
 
 
 --
 -- Data for Name: dataset_author; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
-COPY dataset_author (id, dataset_id, author_id, rank, role) FROM stdin;
-3478	210	3789	1	\N
-3479	210	3790	2	\N
-3480	210	3791	3	\N
-3481	211	3792	1	\N
-3482	211	3793	2	\N
-3483	211	3794	3	\N
-3484	211	3795	4	\N
-3485	211	3796	5	\N
-3486	212	3803	1	\N
-3487	212	3804	2	\N
-3488	212	3805	3	\N
-3489	212	3806	4	\N
-3490	212	3807	5	\N
-3491	213	3808	1	\N
-3492	213	3809	2	\N
+COPY dataset_author (id, dataset_id, author_id, rank, role, awardee) FROM stdin;
+3478	210	3789	1	\N	\N
+3479	210	3790	2	\N	\N
+3480	210	3791	3	\N	\N
+3481	211	3792	1	\N	\N
+3482	211	3793	2	\N	\N
+3483	211	3794	3	\N	\N
+3484	211	3795	4	\N	\N
+3485	211	3796	5	\N	\N
+3486	212	3803	1	\N	\N
+3487	212	3804	2	\N	\N
+3488	212	3805	3	\N	\N
+3489	212	3806	4	\N	\N
+3490	212	3807	5	\N	\N
+3491	213	3808	1	\N	\N
+3492	213	3809	2	\N	\N
+3505	214	3810	1	\N	\N
+3506	214	3811	2	\N	\N
+3507	214	3812	3	\N	\N
+3508	214	3813	4	\N	\N
+3509	214	3814	5	\N	\N
+3510	214	3815	6	\N	\N
+3511	214	3816	7	\N	\N
+3512	214	3817	8	\N	\N
+3513	214	3818	9	\N	\N
+3514	214	3819	10	\N	\N
+3515	214	3820	11	\N	\N
+3516	214	3821	12	\N	\N
+3517	214	3822	13	\N	\N
+3518	214	3823	14	\N	\N
+3519	214	3824	15	\N	\N
+3520	214	3825	16	\N	\N
+3521	214	3826	17	\N	\N
+3522	214	3827	18	\N	\N
+3523	214	3828	19	\N	\N
+3524	214	3829	20	\N	\N
+3525	214	3830	21	\N	\N
+3526	214	3831	22	\N	\N
+3527	214	3832	23	\N	\N
+3528	214	3833	24	\N	\N
+3529	214	3834	25	\N	\N
+3530	214	3835	26	\N	\N
+3531	214	3836	27	\N	\N
+3532	214	3837	28	\N	\N
+3533	214	3838	29	\N	\N
+3534	214	3839	30	\N	\N
+3535	214	3840	31	\N	\N
+3536	214	3841	32	\N	\N
+3537	214	3842	33	\N	\N
+3538	214	3843	34	\N	\N
+3539	214	3844	35	\N	\N
+3540	214	3845	36	\N	\N
+3541	217	3846	1	\N	\N
+3542	217	3847	2	\N	\N
+3543	217	3848	3	\N	\N
+3544	217	3849	4	\N	\N
+3545	217	3850	5	\N	\N
+3546	217	3851	6	\N	\N
+3547	217	3852	7	\N	\N
+3548	217	3853	8	\N	\N
+3549	217	3854	9	\N	\N
+3550	217	3855	10	\N	\N
+3551	217	3856	11	\N	\N
+3552	217	3857	12	\N	\N
+3553	217	3858	13	\N	\N
+3554	217	3859	14	\N	\N
+3555	217	3860	15	\N	\N
+3556	217	3861	16	\N	\N
+3557	217	3862	17	\N	\N
+3558	217	3863	18	\N	\N
+3559	217	3864	19	\N	\N
+3560	217	3865	20	\N	\N
+3561	217	3866	21	\N	\N
+3562	217	3867	22	\N	\N
+3563	217	3868	23	\N	\N
+3564	217	3869	24	\N	\N
+3565	217	3870	25	\N	\N
+3576	220	3871	1	\N	\N
+3577	220	3872	2	\N	\N
+3578	220	3873	3	\N	\N
+3579	220	3874	4	\N	\N
+3580	220	3875	5	\N	\N
+3581	220	3876	6	\N	\N
+3582	220	3877	7	\N	\N
+3583	220	3878	8	\N	\N
+3584	220	3879	9	\N	\N
+3585	220	3880	10	\N	\N
+3586	221	3881	1	\N	\N
+3587	221	3882	1	\N	\N
+3588	221	3883	1	\N	\N
+3589	221	3884	1	\N	\N
+3590	221	3885	1	\N	\N
+3591	221	3886	1	\N	\N
+3592	221	3887	1	\N	\N
+3593	222	3888	1	\N	\N
+3594	222	3889	2	\N	\N
+3595	222	3890	3	\N	\N
+3596	222	3891	4	\N	\N
+3597	222	3892	5	\N	\N
+3598	222	3893	6	\N	\N
+3599	222	3894	7	\N	\N
+3600	222	3895	8	\N	\N
+3601	222	3896	9	\N	\N
+3602	223	3897	1	\N	\N
+3603	223	3898	2	\N	\N
+3604	223	3899	3	\N	\N
 \.
+
+
+--
+-- Name: dataset_author_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('dataset_author_id_seq', 3604, true);
 
 
 --
@@ -2463,11 +2406,86 @@ COPY dataset_funder (id, dataset_id, funder_id, grant_award, comments, awardee) 
 
 
 --
+-- Name: dataset_funder_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('dataset_funder_id_seq', 31, true);
+
+
+--
+-- Name: dataset_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('dataset_id_seq', 223, true);
+
+
+--
 -- Data for Name: dataset_log; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
 COPY dataset_log (id, dataset_id, message, created_at, model, model_id, url) FROM stdin;
+120	214	Description updated from : The workflow for the production of high-throughput sequencing data from nucleic acid samples is complex. There are a series of protocol steps to be followed in the preparation of samples for next-generation sequencing. The quantification of bias in a number of protocol steps, namely DNA fractionation, blunting, phosphorylation, adapter ligation and library enrichment, remains to be determined. We examined the experimental metadata of the public repository Sequence Read Archive (SRA) in order to ascertain the level of annotation of important sequencing steps in submissions to the database.	2018-03-22 03:35:45.705569	dataset	214	
+121	214	Dataset Type added : Genomic	2018-03-22 03:36:30.514601	dataset_type	259	
+122	214	Author added : Bai, H	2018-03-22 03:38:10.179466	dataset_author	3493	
+123	214	Author added : Bayinnamula, B	2018-03-22 03:38:59.567417	dataset_author	3494	
+124	214	Author added : Bu, J	2018-03-22 03:39:44.476539	dataset_author	3495	
+125	214	Author added : Chang, Y	2018-03-22 03:40:17.571434	dataset_author	3496	
+126	214	Author added : Chen, M	2018-03-22 03:41:01.423746	dataset_author	3497	
+127	214	Author added : Chen, Y	2018-03-22 03:41:32.668331	dataset_author	3498	
+128	214	Author added : Gao, Y	2018-03-22 03:43:33.000039	dataset_author	3499	
+129	214	Author added : Guan, B	2018-03-22 03:44:15.039078	dataset_author	3500	
+130	214	Author added : Guo, X	2018-03-22 03:44:45.482266	dataset_author	3501	
+131	214	Author added : Jirimutu, J	2018-03-22 03:45:37.465556	dataset_author	3502	
+132	214	Author added : Lan, T	2018-03-22 03:46:13.62799	dataset_author	3503	
+133	214	Sample added : SAMPLE:SRS687913	2018-03-22 06:33:21.811058	dataset_sample	4356	
+134	214	Manuscript Link added : doi:10.1093/gbe/evu242	2018-03-22 06:36:58.44802	manuscript	285	
+135	214	Manuscript Link updated : 10.1093/gbe/evu242	2018-03-22 06:37:53.302891	manuscript	285	
+136	214	Additional file Mongolia_Human.function.statistics.xls added	2018-03-22 06:47:40.86882	File	88271	/adminFile/update/id/88271
+137	214	Additional file Mongolia_Human.gene.gff added	2018-03-22 06:55:43.346996	File	88272	/adminFile/update/id/88272
+138	214	Additional file Mongolia_genome.jpg added	2018-03-22 07:02:55.533011	File	88273	/adminFile/update/id/88273
+139	214	Additional file Mongolian_Genome_novel_seq.fa added	2018-03-22 07:05:39.185512	File	88274	/adminFile/update/id/88274
+140	214	File Mongolian_Genome_novel_seq.fa updated	2018-03-22 07:05:56.52275	File	88274	/adminFile/update/id/88274
+141	217	Description updated from : 	2018-03-22 07:38:15.141394	dataset	217	
+142	217	Dataset Type added : Genomic	2018-03-22 07:40:00.113553	dataset_type	260	
+143	217	Additional file Data_Access_Agreement_PGDPGS.doc added	2018-03-22 09:07:44.353656	File	88275	/adminFile/update/id/88275
+144	217	Additional file Data_Application_form_PGDPGS.docx added	2018-03-22 09:14:48.679573	File	88276	/adminFile/update/id/88276
+145	220	Description updated from : 	2018-03-22 10:16:35.340683	dataset	220	
+146	220	Additional file AltSplicing  added	2018-03-22 10:19:58.241757	File	88277	/adminFile/update/id/88277
+147	220	Additional file data added	2018-03-22 10:32:10.952492	File	88278	/adminFile/update/id/88278
+148	220	File data removed	2018-03-22 10:33:17.856581	File	88278	
+149	220	File removed : data	2018-03-22 10:33:17.861034	file	88278	
+150	220	Additional file ComparingReplicates added	2018-03-22 10:34:20.184011	File	88279	/adminFile/update/id/88279
+151	220	Additional file contributors.txt added	2018-03-22 10:37:06.714229	File	88280	/adminFile/update/id/88280
+152	220	Additional file README.md added	2018-03-22 10:38:11.47014	File	88281	/adminFile/update/id/88281
+153	220	Additional file V_corymbosum_scaffold_May_2013.fa.gz added	2018-03-22 10:39:17.755322	File	88282	/adminFile/update/id/88282
+154	221	Description updated from : 	2018-03-22 10:49:34.852968	dataset	221	
+155	221	Additional file S_typhi_H58 added	2018-03-22 10:58:06.32304	File	88283	/adminFile/update/id/88283
+156	222	Description updated from : 	2018-03-22 11:09:45.07748	dataset	222	
+157	222	Additional file chr1-7_opmap.xml added	2018-03-22 11:11:29.291177	File	88284	/adminFile/update/id/88284
+158	223	Description updated from : 	2018-03-22 11:20:25.835067	dataset	223	
+159	223	Additional file readme.txt added	2018-03-22 11:21:45.064584	File	88285	/adminFile/update/id/88285
+160	223	Additional file tBLASTx_all added	2018-03-22 11:22:46.159411	File	88286	/adminFile/update/id/88286
+161	210	Additional file phylogeny_study_update added	2018-03-28 03:02:06.42631	File	88287	/adminFile/update/id/88287
+162	210	File Pygoscelis_adeliae.fa.gz removed	2018-03-28 03:36:36.721709	File	88254	
+163	210	File removed : Pygoscelis_adeliae.fa.gz	2018-03-28 03:36:36.726232	file	88254	
+164	210	File Pygoscelis_adeliae.scaf.fa.gz removed	2018-03-28 03:37:03.809369	File	88258	
+165	210	File removed : Pygoscelis_adeliae.scaf.fa.gz	2018-03-28 03:37:03.813591	file	88258	
+166	214	File Mongolian_Genome_novel_seq.fa removed	2018-03-28 06:30:18.747327	File	88274	
+167	214	File removed : Mongolian_Genome_novel_seq.fa	2018-03-28 06:30:18.751574	file	88274	
+168	211	File millet.chr.version2.3.fa.gz removed	2018-03-28 07:23:23.219883	File	88261	
+169	211	File removed : millet.chr.version2.3.fa.gz	2018-03-28 07:23:23.22466	file	88261	
+170	211	File Millet_scaffoldVersion2.3.fa.gz removed	2018-03-28 07:23:34.237319	File	88265	
+171	211	File removed : Millet_scaffoldVersion2.3.fa.gz	2018-03-28 07:23:34.24015	file	88265	
+172	212	File GD-master.tar.gz removed	2018-03-28 07:37:19.815372	File	88269	
+173	212	File removed : GD-master.tar.gz	2018-03-28 07:37:19.820278	file	88269	
 \.
+
+
+--
+-- Name: dataset_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('dataset_log_id_seq', 173, true);
 
 
 --
@@ -2481,13 +2499,28 @@ COPY dataset_project (id, dataset_id, project_id) FROM stdin;
 
 
 --
+-- Name: dataset_project_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('dataset_project_id_seq', 127, true);
+
+
+--
 -- Data for Name: dataset_sample; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
 COPY dataset_sample (id, dataset_id, sample_id) FROM stdin;
 4354	210	4346
 4355	211	4347
+4356	214	4348
 \.
+
+
+--
+-- Name: dataset_sample_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('dataset_sample_id_seq', 4356, true);
 
 
 --
@@ -2499,6 +2532,13 @@ COPY dataset_session (id, identifier, dataset, dataset_id, datasettypes, images,
 
 
 --
+-- Name: dataset_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('dataset_session_id_seq', 26, true);
+
+
+--
 -- Data for Name: dataset_type; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
@@ -2507,7 +2547,16 @@ COPY dataset_type (id, dataset_id, type_id) FROM stdin;
 256	211	18
 257	212	21
 258	213	26
+259	214	25
+260	217	25
 \.
+
+
+--
+-- Name: dataset_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('dataset_type_id_seq', 260, true);
 
 
 --
@@ -2519,11 +2568,25 @@ COPY exp_attributes (id, exp_id, attribute_id, value, units_id) FROM stdin;
 
 
 --
+-- Name: exp_attributes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('exp_attributes_id_seq', 5, true);
+
+
+--
 -- Data for Name: experiment; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
 COPY experiment (id, experiment_type, experiment_name, exp_description, dataset_id, "protocols.io") FROM stdin;
 \.
+
+
+--
+-- Name: experiment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('experiment_id_seq', 3, true);
 
 
 --
@@ -2535,6 +2598,13 @@ COPY extdb (id, database_name, definition, database_homepage, database_search_ur
 
 
 --
+-- Name: extdb_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('extdb_id_seq', 2, true);
+
+
+--
 -- Data for Name: external_link; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
@@ -2542,6 +2612,13 @@ COPY external_link (id, dataset_id, url, external_link_type_id) FROM stdin;
 60	212	https://github.com/ShashaankV/CS	3
 61	212	https://github.com/ShashaankV/GD	3
 \.
+
+
+--
+-- Name: external_link_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('external_link_id_seq', 61, true);
 
 
 --
@@ -2558,26 +2635,43 @@ COPY external_link_type (id, name) FROM stdin;
 
 
 --
+-- Name: external_link_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('external_link_type_id_seq', 4, true);
+
+
+--
 -- Data for Name: file; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
 COPY file (id, dataset_id, name, location, extension, size, description, date_stamp, format_id, type_id, code, index4blast, download_count, alternative_location) FROM stdin;
-88252	210	Pygoscelis_adeliae.cds.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100006/phylogeny_study_update/Pygoscelis_adeliae.cds.gz	cds	6	coding sequence predictions on genome assembly	2014-05-12	41	117	FILE_CODE	\N	0	\N
-88254	210	Pygoscelis_adeliae.fa.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100006/phylogeny_study_update/Pygoscelis_adeliae.fa.gz	gz	350	assembled scaffolds from sequence data	2014-05-12	41	113	FILE_CODE	\N	0	\N
-88255	210	Pygoscelis_adeliae.gff.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100006/phylogeny_study_update/Pygoscelis_adeliae.gff.gz	gz	1590	coding sequence annotation of assembly	2014-05-12	42	114	FILE_CODE	\N	0	\N
-88256	210	Pygoscelis_adeliae.pep.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100006/phylogeny_study_update/Pygoscelis_adeliae.pep.gz	gz	4170000	peptide translations of CDS predictions	2014-05-12	41	115	FILE_CODE	\N	0	\N
-88257	210	Pygoscelis_adeliae.RepeatMasker.out.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100006/phylogeny_study_update/Pygoscelis_adeliae.RepeatMasker.out.gz	gz	7490000	repeat masker results	2014-05-12	43	116	FILE_CODE	\N	0	\N
-88258	210	Pygoscelis_adeliae.scaf.fa.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100006/Pygoscelis_adeliae.scaf.fa.gz	gz	350		2014-05-12	41	113	FILE_CODE	\N	0	\N
-88259	210	readme.txt	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100006/readme.txt	txt	1		2014-05-12	43	112	FILE_CODE	\N	0	\N
-88261	211	millet.chr.version2.3.fa.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100020/millet.chr.version2.3.fa.gz	gz	109		2011-11-12	41	113	FILE_CODE	\N	0	\N
-88262	211	Millet.fa.glean.cds.v3.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100020/Millet.fa.glean.cds.v3.gz	gz	13000		2011-11-12	41	117	FILE_CODE	\N	0	\N
-88263	211	Millet.fa.glean.pep.v3.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100020/Millet.fa.glean.pep.v3.gz	gz	85000000		2011-11-12	41	115	FILE_CODE	\N	0	\N
-88264	211	Millet.fa.glean.v3.gff	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100020/Millet.fa.glean.v3.gff	gz	14000000		2011-11-12	42	114	FILE_CODE	\N	0	\N
-88265	211	Millet_scaffoldVersion2.3.fa.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100020/Millet_scaffoldVersion2.3.fa.gz	gz	109000		2011-11-12	41	113	FILE_CODE	\N	0	\N
-88266	211	readme.txt	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100020/readme.txt	txt	1		2011-11-12	43	112	FILE_CODE	\N	0	\N
-88267	212	CS-master.tar.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100094/CS-master.tar.gz	gz	114	compressed archive of the Analysis scripts (CS) files	2014-06-06	44	118	FILE_CODE	\N	0	\N
-88269	212	GD-master.tar.gz	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100094/GD-master.tar.gz	gz	163	compressed archive of the mock data and scripts GD files	2014-06-06	44	119	FILE_CODE	\N	0	\N
-88270	213	Diagram-ALL-FIELDS-Check-annotation.jpg	ftp://climb.genomics.cn/pub/10.5524/100001_101000/100142/Diagram-ALL-FIELDS-Check-annotation.jpg	jpg	54	image used in manuscript	2015-04-29	41	113	FILE_CODE	\N	0	\N
+88271	214	Mongolia_Human.function.statistics.xls	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100104/Annotation/functional_annotation/Mongolia_Human.function.statistics.xls	xls	197	Statistics file of function annotation	2014-09-04	46	120	FILE_CODE	\N	0	\N
+88272	214	Mongolia_Human.gene.gff	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100104/Annotation/gene_annotation/Mongolia_Human.gene.gff	off	12805717	Gene annotation results	2014-09-04	42	114	FILE_CODE	\N	0	\N
+88273	214	Mongolia_genome.jpg	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100104/Mongolia_genome.jpg	jpg	819397	figure	2014-09-04	47	121	FILE_CODE	\N	0	\N
+88286	223	tBLASTx_all	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100258/tBLASTx_all	unknown	100		2016-12-31	47	124	FILE_CODE	\N	0	\N
+88252	210	Pygoscelis_adeliae.cds.gz	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100006/phylogeny_study_update/Pygoscelis_adeliae.cds.gz	cds	6	coding sequence predictions on genome assembly	2014-05-12	41	117	FILE_CODE	\N	0	\N
+88263	211	Millet.fa.glean.pep.v3.gz	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100020/Millet.fa.glean.pep.v3.gz	gz	85000000		2011-11-12	41	115	FILE_CODE	\N	0	\N
+88255	210	Pygoscelis_adeliae.gff.gz	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100006/phylogeny_study_update/Pygoscelis_adeliae.gff.gz	gz	1590	coding sequence annotation of assembly	2014-05-12	42	114	FILE_CODE	\N	0	\N
+88256	210	Pygoscelis_adeliae.pep.gz	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100006/phylogeny_study_update/Pygoscelis_adeliae.pep.gz	gz	4170000	peptide translations of CDS predictions	2014-05-12	41	115	FILE_CODE	\N	0	\N
+88257	210	Pygoscelis_adeliae.RepeatMasker.out.gz	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100006/phylogeny_study_update/Pygoscelis_adeliae.RepeatMasker.out.gz	gz	7490000	repeat masker results	2014-05-12	43	116	FILE_CODE	\N	0	\N
+88264	211	Millet.fa.glean.v3.gff	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100020/Millet.fa.glean.v3.gff	gz	14000000		2011-11-12	42	114	FILE_CODE	\N	0	\N
+88259	210	readme.txt	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100006/readme.txt	txt	1		2014-05-12	43	112	FILE_CODE	\N	0	\N
+88287	210	phylogeny_study_update	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100006/phylogeny_study_update	NONE	100		\N	47	124	FILE_CODE	\N	0	\N
+88270	213	Diagram-ALL-FIELDS-Check-annotation.jpg	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100142/Diagram-ALL-FIELDS-Check-annotation.jpg	jpg	54	image used in manuscript	2015-04-29	41	113	FILE_CODE	\N	0	\N
+88262	211	Millet.fa.glean.cds.v3.gz	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100020/Millet.fa.glean.cds.v3.gz	gz	13000		2011-11-12	41	117	FILE_CODE	\N	0	\N
+88266	211	readme.txt	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100020/readme.txt	txt	1		2011-11-12	43	112	FILE_CODE	\N	0	\N
+88267	212	CS-master.tar.gz	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100094/CS-master.tar.gz	gz	114	compressed archive of the Analysis scripts (CS) files	2014-06-06	44	118	FILE_CODE	\N	0	\N
+88275	217	Data_Access_Agreement_PGDPGS.doc	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100112/Data_Access_Agreement_PGDPGS.doc	doc	89581	This agreement governs the terms on which access will be granted to the NGS data generated by the CITIC Xiangya Hospital and BGI for PGD/PGS.	2014-10-31	48	123	FILE_CODE	\N	0	\N
+88276	217	Data_Application_form_PGDPGS.docx	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100112/Data_Application_form_PGDPGS.docx	docx	88604	Application form for Access to the Data of PGD/PGS	2014-10-31	49	123	FILE_CODE	\N	0	\N
+88277	220	AltSplicing 	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100117/AltSplicing	unknown	1363149		2015-01-22	47	124	FILE_CODE	\N	0	\N
+88279	220	ComparingReplicates	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100117/ComparingReplicates	unknown	1363149		2015-01-22	47	124	FILE_CODE	\N	0	\N
+88280	220	contributors.txt	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100117/contributors.txt	txt	100		2015-01-22	43	112	FILE_CODE	\N	0	\N
+88281	220	README.md	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100117/README.md	md	100		2015-01-22	43	112	FILE_CODE	\N	0	\N
+88282	220	V_corymbosum_scaffold_May_2013.fa.gz	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100117/V_corymbosum_scaffold_May_2013.fa.gz	gz	100		2015-01-22	41	117	FILE_CODE	\N	0	\N
+88283	221	S_typhi_H58	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100159/S_typhi_H58	unknown	100		\N	47	124	FILE_CODE	\N	0	\N
+88284	222	chr1-7_opmap.xml	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100179/chr1-7_opmap.xml	xml	100		2015-11-04	47	120	FILE_CODE	\N	0	\N
+88285	223	readme.txt	ftp://penguin.genomics.cn/pub/10.5524/100001_101000/100258/readme.txt	txt	100		2016-12-31	43	112	FILE_CODE	\N	0	\N
 \.
 
 
@@ -2590,11 +2684,25 @@ COPY file_attributes (id, file_id, attribute_id, value, unit_id) FROM stdin;
 
 
 --
+-- Name: file_attributes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('file_attributes_id_seq', 2, true);
+
+
+--
 -- Data for Name: file_experiment; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
 COPY file_experiment (id, file_id, experiment_id) FROM stdin;
 \.
+
+
+--
+-- Name: file_experiment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('file_experiment_id_seq', 1, true);
 
 
 --
@@ -2607,7 +2715,25 @@ COPY file_format (id, name, description, edam_ontology_id) FROM stdin;
 43	TEXT	(.doc, .readme, .text, .txt) - a text file	\N
 44	TAR	(.tar) - an archive containing other files	\N
 45	PDF	(.pdf) - portable document format	\N
+46	EXCEL		\N
+47	UNKNOWN		\N
+48	DOC		\N
+49	DOCX		\N
 \.
+
+
+--
+-- Name: file_format_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('file_format_id_seq', 49, true);
+
+
+--
+-- Name: file_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('file_id_seq', 88287, true);
 
 
 --
@@ -2619,29 +2745,40 @@ COPY file_relationship (id, file_id, related_file_id, relationship_id) FROM stdi
 
 
 --
+-- Name: file_relationship_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('file_relationship_id_seq', 4, true);
+
+
+--
 -- Data for Name: file_sample; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
 COPY file_sample (id, sample_id, file_id) FROM stdin;
 18916	4346	88252
-18918	4346	88254
 18919	4346	88255
 18920	4346	88256
 18921	4346	88257
-18922	4346	88258
-18925	4347	88261
 18926	4347	88262
 18927	4347	88263
 18928	4347	88264
-18929	4347	88265
 18930	4347	88266
+18936	4348	88271
+18937	4348	88272
 \.
+
+
+--
+-- Name: file_sample_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('file_sample_id_seq', 18938, true);
 
 
 --
 -- Data for Name: file_type; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
-
 
 COPY file_type (id, name, description, edam_ontology_id) FROM stdin;
 112	Readme		\N
@@ -2652,7 +2789,19 @@ COPY file_type (id, name, description, edam_ontology_id) FROM stdin;
 117	Coding sequence		\N
 118	Script		\N
 119	Mixed archive		\N
+120	Other		\N
+121	Image		\N
+122	Genome sequence		\N
+123	Article		\N
+124	Directory		\N
 \.
+
+
+--
+-- Name: file_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('file_type_id_seq', 124, true);
 
 
 --
@@ -2661,6 +2810,13 @@ COPY file_type (id, name, description, edam_ontology_id) FROM stdin;
 
 COPY funder_name (id, uri, primary_name_display, country) FROM stdin;
 \.
+
+
+--
+-- Name: funder_name_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('funder_name_id_seq', 6171, true);
 
 
 --
@@ -2674,6 +2830,13 @@ COPY gigadb_user (id, email, password, first_name, last_name, affiliation, role,
 
 
 --
+-- Name: gigadb_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('gigadb_user_id_seq', 345, true);
+
+
+--
 -- Data for Name: image; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
@@ -2683,7 +2846,20 @@ COPY image (id, location, tag, url, license, photographer, source) FROM stdin;
 223	100020_Setaria_italica.jpg	Foxtail millet	http://gigadb.org/images/data/cropped/100020_Setaria_italica.jpg	GNU Free Documentation License, CC SA	Markus Hagenlocher	Wikimedia Commons
 224	Images_147.png	CS icon 1	http://gigadb.org/images/uploads/image_upload/Images_147.png	public domain	Shashaank Vattikuti	Gigascience
 225	100142.jpg	Overlap between different protocol search terms	http://gigadb.org/images/data/cropped/100142.jpg	CC0	Alnasir and Shanahan 2015	Alnasir and Shanahan 2015
+226	100104.jpg	Mongolian Genome	http://gigadb.org/images/data/cropped/mongolia.jpg	CC0	Unknown	Unknown
+227	images_177.png	CITIC Xiangya Hospital and BGI PGD/PGS DAC	http://gigadb.org/images/uploads/image_upload/Images_177.png	public domain	N/A	CITIC-Xiangya_BGI
+228	Blueberry.jpg	Simple Blueberry	http://gigadb.org/images/data/cropped/Blueberry.jpg	Public domain	Famest	wikimedia
+229	100159.jpg	links	http://gigadb.org/images/data/cropped/100159.jpg	Public Domain	Rene Warren	bcgsc
+230	100179.jpg	Paired-end CE plot (FRC) for assembly evaluation.	http://gigadb.org/images/data/cropped/100179.jpg	CC0	Remi-Andre Olsen	Remi-Andre Olsen
+231	Images_351.png	C arizonana spittle mass on grapevine	http://gigadb.org/images/uploads/image_upload/Images_351.png	Public Domain	SJ Castle	SJ Castle
 \.
+
+
+--
+-- Name: image_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('image_id_seq', 231, true);
 
 
 --
@@ -2695,11 +2871,33 @@ COPY link (id, dataset_id, is_primary, link, description) FROM stdin;
 
 
 --
+-- Name: link_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('link_id_seq', 294, true);
+
+
+--
+-- Name: link_prefix_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('link_prefix_id_seq', 46, true);
+
+
+--
 -- Data for Name: manuscript; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
 COPY manuscript (id, identifier, pmid, dataset_id) FROM stdin;
+285	10.1093/gbe/evu242	\N	214
 \.
+
+
+--
+-- Name: manuscript_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('manuscript_id_seq', 285, true);
 
 
 --
@@ -2708,6 +2906,13 @@ COPY manuscript (id, identifier, pmid, dataset_id) FROM stdin;
 
 COPY news (id, title, body, start_date, end_date) FROM stdin;
 \.
+
+
+--
+-- Name: news_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('news_id_seq', 3, true);
 
 
 --
@@ -2731,13 +2936,26 @@ COPY project (id, url, name, image_location) FROM stdin;
 
 
 --
--- Data for Name: publisher; Type: TABLE DATA; Schema: public; Owner: gigadb
+-- Name: project_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
 --
 
+SELECT pg_catalog.setval('project_id_seq', 17, true);
+
+
+--
+-- Data for Name: publisher; Type: TABLE DATA; Schema: public; Owner: gigadb
+--
 
 COPY publisher (id, name, description) FROM stdin;
 1	GigaScience	
 \.
+
+
+--
+-- Name: publisher_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('publisher_id_seq', 4, true);
 
 
 --
@@ -2746,6 +2964,13 @@ COPY publisher (id, name, description) FROM stdin;
 
 COPY relation (id, dataset_id, related_doi, relationship_id) FROM stdin;
 \.
+
+
+--
+-- Name: relation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('relation_id_seq', 84, true);
 
 
 --
@@ -2758,11 +2983,25 @@ COPY relationship (id, name) FROM stdin;
 
 
 --
+-- Name: relationship_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('relationship_id_seq', 22, true);
+
+
+--
 -- Data for Name: rss_message; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
 COPY rss_message (id, message, publication_date) FROM stdin;
 \.
+
+
+--
+-- Name: rss_message_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('rss_message_id_seq', 2, true);
 
 
 --
@@ -2772,6 +3011,10 @@ COPY rss_message (id, message, publication_date) FROM stdin;
 COPY sample (id, species_id, name, consent_document, submitted_id, submission_date, contact_author_name, contact_author_email, sampling_protocol) FROM stdin;
 4346	1128854	Pygoscelis_adeliae	\N	345	2016-05-09	John Smith	user@gigadb.org	\N
 4347	1128855	Zhang gu	\N	345	2016-05-11	John Smith	user@gigadb.org	\N
+4348	1128857	SAMPLE:SRS687913	\N	\N	2014-11-14	Xiaoshen Guo	guoxs@genomics.cn	\N
+4349	1128859	ONealRipe2010	\N	\N	2015-01-30	Ann Loraine	 aloraine@uncc.edu	\N
+4350	1128859	ONealGreen2010	\N	\N	2015-01-30	Ann Loraine	aloraine@uncc.edu	\N
+4351	1128859	2-42 cup	\N	\N	2015-01-30	Ann Loraine	aloraine@uncc.edu	\N
 \.
 
 
@@ -2785,6 +3028,13 @@ COPY sample_attribute (id, sample_id, attribute_id, value, unit_id) FROM stdin;
 
 
 --
+-- Name: sample_attribute_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('sample_attribute_id_seq', 30060, true);
+
+
+--
 -- Data for Name: sample_experiment; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
@@ -2793,11 +3043,32 @@ COPY sample_experiment (id, sample_id, experiment_id) FROM stdin;
 
 
 --
+-- Name: sample_experiment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('sample_experiment_id_seq', 2, true);
+
+
+--
+-- Name: sample_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('sample_id_seq', 4351, true);
+
+
+--
 -- Data for Name: sample_rel; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
 COPY sample_rel (id, sample_id, related_sample_id, relationship_id) FROM stdin;
 \.
+
+
+--
+-- Name: sample_rel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('sample_rel_id_seq', 8, true);
 
 
 --
@@ -2817,6 +3088,13 @@ COPY search (id, user_id, name, query, result) FROM stdin;
 
 
 --
+-- Name: search_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('search_id_seq', 27, true);
+
+
+--
 -- Data for Name: species; Type: TABLE DATA; Schema: public; Owner: gigadb
 --
 
@@ -2824,7 +3102,16 @@ COPY species (id, tax_id, common_name, genbank_name, scientific_name, eol_link) 
 1128854	9238	Adelie penguin	Adelie penguin	Pygoscelis adeliae	\N
 1128855	4555	Foxtail millet	foxtail millet	Setaria italica	\N
 1128856	-1	None assigned	None assigned	None assigned	\N
+1128857	9606	Human	human	Homo sapiens	\N
+1128859	69266	American blueberry	\N	Vaccinium corymbosum	\N
 \.
+
+
+--
+-- Name: species_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('species_id_seq', 1128859, true);
 
 
 --
@@ -2842,7 +3129,15 @@ COPY type (id, name, description) FROM stdin;
 24	Proteomic	large scale protein analysis dataset
 25	Genomic	genetic and genomic data e.g. sequence and assemblies
 26	Metadata	
+27	Article	
 \.
+
+
+--
+-- Name: type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gigadb
+--
+
+SELECT pg_catalog.setval('type_id_seq', 27, true);
 
 
 --
