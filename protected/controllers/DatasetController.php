@@ -91,7 +91,7 @@ class DatasetController extends Controller
 
         $cookies = Yii::app()->request->cookies;
         // file
-        $setting = array('name','size', 'type_id', 'format_id', 'location', 'date_stamp','sample_id'); // 'description','attribute' are hidden by default
+        $setting = array('name','size', 'type_id', 'format_id', 'preview', 'location', 'date_stamp','sample_id'); // 'description','attribute' are hidden by default
         $pageSize = 10;
 
         if(isset($cookies['file_setting'])) {
@@ -115,21 +115,70 @@ class DatasetController extends Controller
             Yii::app()->request->cookies['file_setting'] = $nc;
         }
 
+        $base_parts = parse_url($model->ftp_site);
 
-        $files = new CActiveDataProvider('File' , array(
-            'criteria'=> $crit,
-            'sort' => array('defaultOrder'=>'name ASC',
-                            'attributes' => array(
-                                'name',
-                                'description',
-                                'size',
-                                'type_id' => array('asc'=>'ft.name asc', 'desc'=>'ft.name desc'),
-                                'format_id' => array('asc'=>'ff.name asc', 'desc'=>'ff.name desc'),
-                                'date_stamp',
-                            )),
-            'pagination' => array('pageSize'=>$pageSize)
-        ));
+        $location =  Yii::app()->request->getParam('location');
 
+        $breadcrumbs = null;
+
+        if (isset($location) && $base_parts['host'] == "penguin.genomics.cn") {
+
+            $location_parts = parse_url($location);
+            $path_array = explode("/",$location_parts['path']);
+
+            $location_path = ltrim(implode("/", array_splice($path_array,1)));
+
+            $wants_ftp_table = true;
+            try {
+                Yii::app()->ftp->chdir($location_path);
+            } catch (GFtpException $e) {
+                $error = $e->getMessage();
+                var_dump($error);
+                Yii::app()->end();
+            }
+            try {
+                $gftp_files = Yii::app()->ftp->ls(".", true, false);
+                $directory_listing = array_map(array('DirectoryListing','toDirectoryListing'), $gftp_files, array_fill(0, count($gftp_files) , $base_parts['scheme'].'://'.$base_parts['host'].'/'.$location_path), array_fill(0,count($gftp_files) , $model->identifier) );
+
+                $pagination = new FtpTablePagination(sizeof($gftp_files));
+                $pagination->setPageSize($pageSize);
+                $pagination->params= array('location'=>$location);
+                $pagination->route="/dataset/view/id/$model->identifier";
+
+                $files = new CArrayDataProvider (
+                    $directory_listing,
+                    array(
+                        'id'=>'filename',
+                        'keyField'=>'filename',
+                        'pagination'=>$pagination
+                    )
+                );
+
+                $breadcrumbs = DirectoryListing::toBreadCrumbs($model->identifier, $location_path, $location);
+//                var_dump($breadcrumbs);
+//                Yii::app()->end();
+
+            } catch (GFtpException $e) {
+                $error = $e->getMessage();
+            }
+        }
+        else {
+            $wants_ftp_table = false;
+
+            $files = new CActiveDataProvider('File' , array(
+                'criteria'=> $crit,
+                'sort' => array('defaultOrder'=>'name ASC',
+                    'attributes' => array(
+                        'name',
+                        'description',
+                        'size',
+                        'type_id' => array('asc'=>'ft.name asc', 'desc'=>'ft.name desc'),
+                        'format_id' => array('asc'=>'ff.name asc', 'desc'=>'ff.name desc'),
+                        'date_stamp',
+                    )),
+                'pagination' => array('pageSize'=>$pageSize)
+            ));
+        }
         //Sample
         $columns = array('name', 'taxonomic_id', 'genbank_name', 'scientific_name', 'common_name', 'attribute');
         $perPage = 10;
@@ -267,6 +316,9 @@ class DatasetController extends Controller
             'form'=>$form,
             'dataset'=>$dataset,
             'files'=>$files,
+            'breadcrumbs'=>$breadcrumbs,
+            'multidownload'=>Yii::app()->multidownload->feature_enabled,
+            'location'=>isset($location)?$location:'',
             'samples'=>$samples,
             'email' => $email,
             'previous_doi' => $previous_doi,
@@ -276,7 +328,8 @@ class DatasetController extends Controller
             'logs'=>$model->datasetLogs,
             'relates' => $relates,
             'scholar' => $scholar,
-            'link_type' => $link_type
+            'link_type' => $link_type,
+            'wants_ftp_table' => $wants_ftp_table
         ));
     }
 

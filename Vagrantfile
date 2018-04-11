@@ -59,7 +59,7 @@ if ENV['GIGADB_BOX'] == 'docker'  # Install gigadb-website as Docker app on Ubun
       v.customize ["modifyvm", :id, "--nictype1", "virtio" ]
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
-      v.customize ["modifyvm", :id, "--memory", "2048"]
+      v.customize ["modifyvm", :id, "--memory", "1024"]
     end
   end
 else  # Install gigadb-website directly on VM or AWS
@@ -217,12 +217,42 @@ else  # Install gigadb-website directly on VM or AWS
 	      # Set server environment: development
 	      ftp_chef.environment = "development"
 	      ftp_chef.add_recipe "fileserver"
+	      ftp_chef.add_recipe "fileserver::examples"
+          ftp_chef.add_recipe "fileserver::bundles"
+          ftp_chef.add_recipe "worker"
 	    end
 
-	    ftp.vm.provider 'virtualbox' do |v|
-	      v.memory = 2048
-	      v.cpus = 2
-	    end
+# 	    ftp.vm.provider 'virtualbox' do |v|
+# 	      v.memory = 1024
+# 	      v.cpus = 1
+# 	    end
+      end
+    end
+
+    if ENV['DEPLOY_GIGADB_QUEUES'] == 'true'
+      config.vm.define 'queues-server' do |queues|
+        queues.vm.box = 'nrel/CentOS-6.7-x86_64'
+        # queues.vm.box_version = '2.2.9'
+        queues.vm.hostname = 'queues-server.test'
+        queues.vm.network 'private_network', ip: '10.1.1.35'
+        set_hostname(queues)
+
+        queues.vm.provision :chef_solo do |queues_chef|
+          queues_chef.cookbooks_path = [
+            "chef/site-cookbooks",
+            "chef/chef-cookbooks",
+          ]
+          queues_chef.environments_path = 'chef/environments'
+
+          # Set server environment: development
+          queues_chef.environment = "development"
+          queues_chef.add_recipe "queues"
+        end
+
+#         queues.vm.provider 'virtualbox' do |v|
+#           v.memory = 1024
+#           v.cpus = 1
+#         end
       end
     end
   end

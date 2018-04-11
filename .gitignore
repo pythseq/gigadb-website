@@ -37,12 +37,12 @@ vagrant.log
 # Chef
 chef/environments/development.json
 chef/environments/production.json
-chef/environments/docker.json
 **/encrypted_data_bag_secret
 chef/nodes/*.json
 chef/backup
 chef/cache
 chef/chef.pid
+development-cookbooks/development.json
 
 # PhpStorm
 *.iml
@@ -57,13 +57,10 @@ nbproject/project.properties
 # MacOSX
 .DS_Store
 
-
 # Testing
 tests/fixtures/affiliate_users_credentials
 sql/temp_command.sql
 
-
 # Behat
-
 Behat/vendor
 
