@@ -1,13 +1,20 @@
-# SETUP for new functionalities
+# FTP directories, multi-file download and file preview functionalities
 
-FTP directories [#63](https://github.com/gigascience/gigadb-website/issues/63), multi-download [#67](https://github.com/gigascience/gigadb-website/issues/67) and file preview [#66](https://github.com/gigascience/gigadb-website/issues/66)
+This page documents the set up and use of the following functionalities:
 
-System Architecture :
-[https://gist.githubusercontent.com/rija/f6fa3cfeda0f0a0da4c6f08326bbe6f7/raw/d882eddfb1028b07eaabbc6a5b264af78890921a/gistfile1.txt]
+* FTP directories [#63](https://github.com/gigascience/gigadb-website/issues/63)
+* Multi-download [#67](https://github.com/gigascience/gigadb-website/issues/67)
+* File preview [#66](https://github.com/gigascience/gigadb-website/issues/66)
 
+## [System Architecture](https://gist.githubusercontent.com/rija/f6fa3cfeda0f0a0da4c6f08326bbe6f7/raw/d882eddfb1028b07eaabbc6a5b264af78890921a/gistfile1.txt)
 
-## (0) Check out the ftp-table branch
+![System architecture](https://drive.google.com/uc?id=1Jlnj3dTB_E8s3c-NlxRvJC-RlDsuNiGs)
 
+## Set up procedure
+
+### Source code
+
+Check out the ftp-table branch from GitHub:
 ```
 $ git clone https://github.com/rija/gigadb-website
 $ cd gigadb-website
@@ -15,18 +22,17 @@ $ git checkout -b ftp-table origin/ftp-table
 $ cd chef
 $ git submodule init
 $ git submodule update
-$ ..
 ```
 
-## (1) Copy `development.json.sample` to `development.json`
+### Configuration of gigadb-website 
 
-Review or change the information in the "ftp", "mfr", "aws", and "supervisor" blocks.
+Copy `development.json.sample` to `development.json`. Review or change the 
+information in the "ftp", "mfr", "aws", and "supervisor" blocks:
 
 
-### (1.1) FTP
+#### FTP configuration
 
 To use the FTP server on the ftp-server vagrant box, use the following values:
-
 ```
 "ftp": {
 "connection_url": "ftp://anonymous:anonymous@10.1.1.33:21",
@@ -42,8 +48,8 @@ Otherwise to connect to the live ftp server, use:
 },
 ```
 
-The ftp-server vagrant box needs users information to be filled in in the development.json file
-
+The ftp-server vagrant box needs users information to be filled in in the 
+development.json file:
 ```
 "user1": "user1",
 "user1_name": "user one",
@@ -64,7 +70,7 @@ The ftp-server vagrant box needs users information to be filled in in the develo
 
 ```
 
-### (1.2) MFR
+#### MFR
 
 MFR is a python web application that renders (as HTML and PDF) the content of 
 files stored in a remote server in an iframe. MFR does not support FTP so it 
@@ -79,16 +85,16 @@ For Open Science: Modular-File-Renderer a.k.a MFR. The default value is of a
 remote test server. For testing purpose, there is no need to change this value.
 Later on in the configuration process you will need to supply me with the bucket
 name created so I can whitelist them on this server.
-
 ```
   "mfr": {
     "preview_server": "128.199.125.190:7778"
   },
 ```
 
+#### AWS
 
-### (1.3) AWS
-
+Firstly, add the Access key and Secret ID of an AWS user that can fully manage 
+S3 resources:
 ```
 "aws": {
   "aws_access_key_id": "DUMMYXXXX",
@@ -99,14 +105,12 @@ name created so I can whitelist them on this server.
 },
 ```
 
-Firstly, add the Access key and Secret ID of an AWS user that can fully manage 
-S3 resources.
-
 The __s3_bucket_for_file_previews__ bucket is where the preview files are 
 uploaded before they are shown in a preview pane (directly or indirectly through 
 MFR) to the web visitors.
 
-### (1.4) Supervisor
+
+#### Supervisor
 
 The new functionalities will work without changing the default values for this 
 block. However, on production, it's recommended to increase the value of the 
@@ -118,7 +122,6 @@ preview file which is sent to the S3 bucket.
 
 The following commands can be used to check the status of supervisor and 
 start/stop the process:
-
 ```bash
 $ /etc/init.d/supervisord status
 $ /etc/init.d/supervisord stop
@@ -129,7 +132,7 @@ A log file detailing the creation of preview file is available at:
 
 /var/log/generatepreview.log
 
-## (2) Run and provision vagrant images
+### Run and provision vagrant images
 
 Vagrantfile now configures **3 machines**. Make sure the following environment 
 variables are set:
@@ -139,9 +142,8 @@ DEPLOY_GIGADB_QUEUES=true
 GIGADB_BOX=centos
 ```
 
-If running on Mac OS X, and wants to connect to the ftp-server vagrant box, the 
-following would help too:
-
+If running on Mac OS X, and you want to connect to the ftp-server vagrant box, 
+the following would help too:
 ```
 GIGADB_ON_MACOSX=true
 ```
@@ -151,7 +153,7 @@ Then run:
 $ vagrant up
 ```
 
-## (3) Create the required S3 buckets
+### Create required S3 buckets
 
 ```
 $ vagrant ssh gigadb-website
@@ -162,12 +164,11 @@ The above command will create the one bucket with the name configured in section
 [1.3].
 
 To delete a bucket and all its content, use the following command:
-
 ```
 $ /vagrant/protected/yiic clearbucket -b=<bucket name> --delete=yes
 ```
 
-## (4) Authorising the s3 urls for the preview bucket to MFR
+### Authorising S3 URLs for the preview bucket to MFR
 
 MFR whitelists URLs that are allowed to have a preview generated. So if you've 
 configured the "mfr" block of `development.json` with the default MFR test 
@@ -177,7 +178,6 @@ add it to the list of allowed domains on the test server.
 Alternatively, if you have Docker installed (MFR uses Docker for dev/test), you 
 can run the following commands to deploy your own instance of MFR with your own 
 allowed domains:
-
 ```bash
 $ git clone https://github.com/rija/modular-file-renderer
 $ cd modular-file-renderer
@@ -189,7 +189,6 @@ is available from  Docker Toolbox. Docker for Mac is not compatible with old Mac
 computers. Starting the Kitematic software will boot up a Kitematic Docker VM
 which can then be used to run the MFR container. Next, use the 
 modular-file-renderer to build it Docker image:
-
 ```bash
 $ eval "$(docker-machine env default)"
 $ docker build -t="mfr" .
@@ -214,7 +213,7 @@ https://<your preview bucket name>.s3.amazonaws.com
 Then in the `development.json`, use __192.168.99.100:7778__ in the "mfr" block 
 (replace 192.168.99.100 by your docker machine IP address).
 
-## (5) Testing with the supplied sample data
+### Testing with the supplied sample data
 
 All the new functionalities can be tested by navigating to the dataset view 
 below using the files shown in the tree further down:
