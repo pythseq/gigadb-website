@@ -221,11 +221,6 @@ else  # Install gigadb-website directly on VM or AWS
           ftp_chef.add_recipe "fileserver::bundles"
           ftp_chef.add_recipe "worker"
 	    end
-
-# 	    ftp.vm.provider 'virtualbox' do |v|
-# 	      v.memory = 1024
-# 	      v.cpus = 1
-# 	    end
       end
     end
 
@@ -248,11 +243,6 @@ else  # Install gigadb-website directly on VM or AWS
           queues_chef.environment = "development"
           queues_chef.add_recipe "queues"
         end
-
-#         queues.vm.provider 'virtualbox' do |v|
-#           v.memory = 1024
-#           v.cpus = 1
-#         end
       end
     end
   end
