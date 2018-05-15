@@ -12,13 +12,13 @@ Yii::setPathOfAlias('Elastica', realpath(dirname(__FILE__). '/../../Elastica/lib
 Yii::setPathOfAlias('googleAPI', realpath(dirname(__FILE__).'/../../google-api-php-client/src'));
 Yii::setPathOfAlias('scholar', realpath(dirname(__FILE__).'/../scripts/scholar.py'));
 
-//Importing AWS SDK
+// Importing AWS SDK
 Yii::setPathOfAlias('Aws',dirname(__FILE__).DIRECTORY_SEPARATOR.'../vendors/aws/Aws');
 Yii::setPathOfAlias('Guzzle',dirname(__FILE__).DIRECTORY_SEPARATOR.'../vendors/aws/Guzzle');
 Yii::setPathOfAlias('Symfony',dirname(__FILE__).DIRECTORY_SEPARATOR.'../vendors/aws/Symfony');
 
 
-//Importing beanstalkd client
+// Importing beanstalkd client
 Yii::setPathOfAlias('Beanstalk',dirname(__FILE__).DIRECTORY_SEPARATOR.'../vendors/beanstalk');
 
 return CMap::mergeArray(array(
@@ -87,7 +87,7 @@ return CMap::mergeArray(array(
         ),
         'ftp' => array(
             'class' => 'ext.GFtp.GFtpApplicationComponent',
-            'connectionString' => 'ftp://anonymous:anonymous@vsftpd:21',
+            'connectionString' => '<%= node[:gigadb][:ftp][:connection_url] %>',
             'timeout' => 120,
             'passive' => true
         ),
@@ -219,7 +219,7 @@ return CMap::mergeArray(array(
     ),
 
     'params' => array(
-        # ES search
+        // ES search
         'es_search' => array(
             'limits' => array(
                 'default' => 10,
