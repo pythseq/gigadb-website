@@ -19,12 +19,21 @@
         "localhost"
       ],
       "ftp": {
-        "connection_url": "ftp://anonymous:anonymous@10.1.1.33:21",
-        "host": "10.1.1.33",
-        "examples_file": "https://s3-ap-southeast-1.amazonaws.com/gigadb-ftp-sample-data/ftpexamples3.tar.gz"
+        "connection_url": "ftp://anonymous:anonymous@vsftpd:21",
+        "host": "vsftpd",
+        "examples_file": "https://s3-ap-southeast-1.amazonaws.com/gigadb-ftp-sample-data/ftpexamples4.tar.gz"
       },
       "mfr": {
-        "preview_server": "192.168.99.100:7778"
+        "preview_server": "mfr:7778"
+      },
+      "redis": {
+        "server": "redis"
+      },
+      "beanstalk": {
+        "host": "beanstalkd"
+      },
+      "multidownload": {
+        "download_host": "10.1.1.33"
       },
       "site_dir": "/vagrant",
       "root_dir": "/vagrant",
