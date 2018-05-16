@@ -49,10 +49,10 @@ $ vagrant up
 $ vagrant ssh
 ```
 
-As part of the VM creation process, it will execute 
-`yii2-laradock/generate.config.sh` to generate the config files in 
-`protected/config/` required by gigadb-website and download the Yii version 1 
-framework into `/opt/yii-1.1.16` for use by the containers.
+As part of the VM creation process, `yii2-laradock/generate.config.sh` will be
+executed to generate the config files in `protected/config/` required by 
+gigadb-website and download the Yii version 1 framework into `/opt/yii-1.1.16`
+in the Ubuntu VM for use by the containers.
 
 If you change directory to `/vagrant/yii2-laradock` in the Ubuntu Docker VM, you
 can use the [Docker Compose](https://docs.docker.com/compose/) tool to build and 
@@ -60,20 +60,19 @@ start the separate containers that can collectively run an instance of GigaDB.
 This tool relies on a `docker-compose.yml` file which configures the containers 
 in the GigaDB Docker application. For now, we will start up 3 containers: the 
 nginx web server, the postgres RDBMS which stores information about the datasets
-and vsftpd which will act as the file server providing download access to 
-dataset files listed in GigaDB:
+and vsftpd which will provide the FTP server that allows download access to 
+dataset files listed in the GigaDB website:
 ```bash
 $ cd /vagrant/yii2-laradock
 $ docker-compose up -d nginx postgres vsftpd
 ```
 
-If this docker-compose process is successful then the GigaDB website will be 
+If the docker-compose process is successful then the GigaDB website will be 
 displayed at [http://192.168.42.10]( http://192.168.42.10) on your web browser.
 
 ## Listing containers
 
-All of the project containers in this Dockerised version of GigaDB can be 
-listed:
+All of the containers in this Dockerised version of GigaDB can be listed:
 ```bash
 $ docker ps -a
   CONTAINER ID        IMAGE                    COMMAND                  CREATED              STATUS                          PORTS                                                                                      NAMES
@@ -101,10 +100,10 @@ containers:
 
 The main purpose of the VSFTPD container to run VSFTPD, the FTP server that
 provides access to files listed in the GigaDB website. The VSFTPD service is
-executed under the control of [Supervisor](http://supervisord.org), a 
-Python-based process manager that allows its users to monitor and control a
-number of processes on UNIX-like operating systems. Supervisord is its daemon 
-which is configured with a config file in INI config format.
+under the control of [Supervisor](http://supervisord.org), a  Python-based 
+process manager that allows its users to monitor and control a number of 
+processes on UNIX-like operating systems. Supervisord is its daemon which is 
+configured with a config file in INI config format.
 
 The following commands can be used to check the status of supervisor and 
 start/stop the process:
@@ -125,7 +124,7 @@ in the GigaDB website. A function
 preview file which is sent to the S3 bucket.
 
 
-## Other useful Docker commands
+## Useful Docker commands
 
 ### Check log for a container
 ```bash
@@ -218,7 +217,7 @@ $ docker inspect vsftpd | grep IPAddress
             "SecondaryIPAddresses": null,
             "IPAddress": "",
                     "IPAddress": "172.20.0.4",
-# Use IP address in wget to download file
+# Use the 172.20.0.4 IP address in wget to download file
 vagrant@vagrant:~$ wget ftp://172.20.0.4/pub/10.5524/100001_101000/100020/readme.txt
 --2018-04-24 02:30:10--  ftp://172.20.0.4/pub/10.5524/100001_101000/100020/readme.txt
            => ‘readme.txt’
@@ -270,8 +269,8 @@ ftp> exit
 
 ### Test FTP file upload by user2:
 
-There are a number of ftp user accounts which can be used to test file upload
-into the VSFTPD server.
+There are a number of pre-configured ftp user accounts which can be used to test
+file upload into the VSFTPD server.
 ```bash
 $ ftp 172.20.0.4
 Connected to 172.20.0.4
@@ -297,7 +296,150 @@ ftp> ls
 ftp> 
 ```
 
+## File preview functionality in GigaDB
 
-  
-  
+The file preview functionality in GigaDB can be tested using Docker by
+deploying another 3 containers which each run the following services:
+
+### Redis
+
+This is used by the file preview functionality to track worker stage, status and 
+preview URL between the frontend website and the backend VSFTPD server.
+
+### Beanstalk
+
+Beanstalk is a job queue system. When a user clicks on a file preview icon on a 
+GigaDB dataset webpage, the website application creates and forwards software 
+tasks to background worker scripts in the FTP server.
+
+### Modular file renderer
+
+The modular file renderer (MFR) is a python web application that renders (as 
+HTML and PDF) the content of files stored in a remote server in an iframe. MFR 
+does not support FTP so it fetches a file via HTTP from S3 and renders this 
+file. Support for a particular file format has to to be coded but lots of 
+formats are already supported, e.g. images, video, tabular and scientific 
+formats. Until supported, this means that formats such as FASTA/FASTQ are not 
+rendered by MFR. These files might be supported by MFR if it is annotated as a 
+plain/text type.
+
+### Supervisor
+
+The supervisor service runs on the VSFTPD container. When it receives a message
+that the user has clicked on a preview icon on a GigaDB dataset web page, it 
+executes a function to create a preview file which is sent to the S3 bucket.
+
+The following commands can be used to check the status of supervisor and 
+start/stop the process:
+```bash
+$ /etc/init.d/supervisord status
+$ /etc/init.d/supervisord stop
+$ /etc/init.d/supervisord start
+```
+
+A log file detailing the creation of preview file is available at 
+`/var/log/generatepreview.log`.
+
+Redis, beanstalk and the MFR work together as shown in the diagram below:
+
+![Image of file preview architecture](https://drive.google.com/uc?export=view&id=1rbKrm7UjaIKaZe_Zzi8FJDUt1vTXJ87H)
+
+## Container configuration
+
+The 3 extra containers need configuration which is provided in the `.env`
+file that was created earlier by copying `env-gigadb`. What is required is to
+specifically let the gigadb-website application know the location of Redis, 
+Beanstalk and MFR services. This can be provided by the name of the containers
+that each of the services reside in since Docker can be resolve them by 
+container name. The configuration for Redis, Beanstalk and MFR already in 
+`env-gigadb` will work out of the box. Specifically, below are the required 
+configurations:
+
+To use the FTP server in the VSFTPD container, use the following values:
+```
+FTP_CONNECTION_URL=ftp://anonymous:anonymous@vsftpd:21
+```
+
+To configure MFR for testing purpose, there is no need to change this value.
+Later on in the configuration process you will need to supply me with the bucket
+name created so I can whitelist them on this server.
+```
+PREVIEW_SERVER_HOST=mfr:7778
+```
+
+The Redis and Beanstalk services can be resolved by providing their container 
+names which used by the `config.php` and `console.php` files in the 
+`protected/config` directory.
+```
+REDIS_SERVER_HOST=redis
+BEANSTALK_SERVER_HOST=beanstalkd
+```
+
+Configuration that **IS** required is your AWS credentials in order to create 
+the S3 bucket for storing preview files. In addition, a value for the 
+AWS_S3_BUCKET_FOR_FILE_PREVIEWS is required. This is where the preview files are
+uploaded before they are shown in a preview pane (directly or indirectly through
+the MFR) to the web visitors:
+```
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_S3_BUCKET_FOR_FILE_PREVIEWS=
+AWS_DEFAULT_REGION=ap-southeast-1
+```
+
+## Procedure for testing file preview functionality
+
+Start the Ubuntu Docker VM by ensuring environment variable `GIGADB_BOX=docker` 
+and execute:
+```
+$ vagrant up
+```
+
+Boot up all the required containers:
+```bash
+$ vagrant ssh
+vagrant@vagrant:~$ cd /vagrant/yii2-laradock
+vagrant@vagrant:~$ docker-compose up -d nginx postgres vsftpd redis beanstalkd modular-file-renderer 
+```
+
+Create the S3 file preview bucket using the vsftpd container:
+```bash
+# Log into the vsftpd container
+vagrant@vagrant:~$ docker exec -it vsftpd bash
+$ /vagrant/protected/yiic createbucket --fromconfig
+```
+
+If you then go to your AWS S3 Management Console webpage, you should see a 
+bucket with the name specified by the variable AWS_S3_BUCKET_FOR_FILE_PREVIEWS. 
+To delete a bucket and all its content, use the following command:
+```
+$ /vagrant/protected/yiic clearbucket -b=<bucket name> --delete=yes
+```
+
+MFR whitelists URLs that are allowed to have a preview generated. A test
+version of MFR has been installed using Docker and this has been configured from
+within the docker-compose.yml file to allow URLs from the 
+AWS_S3_BUCKET_FOR_FILE_PREVIEWS to be previewed from it
+
+If there are no errors with the docker-compose up process then the GigaDB 
+website will be visble from [http://192.168.42.10](http://192.168.42.10) from a 
+web browser on your host computer. If you then select a dataset such as
+[http://192.168.42.10/dataset/100117](http://192.168.42.10/dataset/100117) and 
+click on the preview icon for `contributors.txt` then a preview file should
+appear in the S3 bucket. Clicking the preview icon a second time should allow 
+the preview to be displayed on the dataset web page.
+
+## File Table View
+
+Viewing the blueberry dataset at 
+[http://192.168.42.10/dataset/100117](http://192.168.42.10/dataset/100117) will 
+allow you to test the file table view functionality. If you look at the 
+`AltSplicing` entry, you will notice that it has been marked up with the
+`Directory` Data Type. Clicking on `AltSplicing` will allow you to see the
+contents of the `AltSplicing` directory.
+
+
+
+
+
 
