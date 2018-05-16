@@ -28,8 +28,8 @@ gigadb-website repo as a sub-module:
 ```bash
 # Change directory into repository
 $ cd gigadb-website
-# Change to develop branch
-$ git checkout develop
+# Change to docker-rija-ftp-table branch
+$ git checkout docker-rija-ftp-table
 # Download sub-modules
 $ git submodule init
 $ git submodule update
@@ -402,7 +402,24 @@ vagrant@vagrant:~$ cd /vagrant/yii2-laradock
 vagrant@vagrant:~$ docker-compose up -d nginx postgres vsftpd redis beanstalkd modular-file-renderer 
 ```
 
-Create the S3 file preview bucket using the vsftpd container:
+You can check whether all the containers have sucessfully started:
+```bash 
+vagrant@vagrant:/vagrant/yii2-laradock$ docker ps -a
+CONTAINER ID        IMAGE                                COMMAND                  CREATED             STATUS                      PORTS                                                                                      NAMES
+baa91fb31fbb        yii2laradock_beanstalkd              "/usr/bin/beanstalkd"    21 minutes ago      Up 21 minutes               0.0.0.0:11300->11300/tcp                                                                   beanstalkd
+6a7ec53b7867        yii2laradock_nginx                   "nginx"                  21 minutes ago      Up 21 minutes               0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp                                                   website-nginx
+b58350a35b30        yii2laradock_vsftpd                  "/usr/sbin/run-vsftp…"   21 minutes ago      Up 21 minutes               0.0.0.0:21->21/tcp, 0.0.0.0:9111->9111/tcp, 20/tcp, 0.0.0.0:21100-21103->21100-21103/tcp   vsftpd
+5ff21efc914b        yii2laradock_php-fpm                 "docker-php-entrypoi…"   21 minutes ago      Up 21 minutes               9000/tcp                                                                                   website-php-fpm
+ea173548f360        yii2laradock_workspace               "/sbin/my_init"          21 minutes ago      Up 21 minutes               0.0.0.0:2222->22/tcp                                                                       workspace
+46a5e538ac19        yii2laradock_modular-file-renderer   "tail -f /dev/null"      21 minutes ago      Up 21 minutes               0.0.0.0:7778->7778/tcp                                                                     mfr_server
+ac042f7b6155        yii2laradock_postgres                "docker-entrypoint.s…"   21 minutes ago      Up 21 minutes               0.0.0.0:5432->5432/tcp                                                                     postgres
+dab34d348c09        tianon/true                          "/true"                  21 minutes ago      Exited (0) 21 minutes ago                                                                                              gigadb-app
+da1ea6b85c93        yii2laradock_redis                   "docker-entrypoint.s…"   21 minutes ago      Up 21 minutes               0.0.0.0:6379->6379/tcp                                                                     redis
+```
+
+Only the `gigadb-app` container should show up as having `Exited`.
+
+Now create the S3 file preview bucket using the vsftpd container:
 ```bash
 # Log into the vsftpd container
 vagrant@vagrant:~$ docker exec -it vsftpd bash
@@ -411,15 +428,16 @@ $ /vagrant/protected/yiic createbucket --fromconfig
 
 If you then go to your AWS S3 Management Console webpage, you should see a 
 bucket with the name specified by the variable AWS_S3_BUCKET_FOR_FILE_PREVIEWS. 
+
 To delete a bucket and all its content, use the following command:
-```
+```bash
 $ /vagrant/protected/yiic clearbucket -b=<bucket name> --delete=yes
 ```
 
-MFR whitelists URLs that are allowed to have a preview generated. A test
-version of MFR has been installed using Docker and this has been configured from
-within the docker-compose.yml file to allow URLs from the 
-AWS_S3_BUCKET_FOR_FILE_PREVIEWS to be previewed from it
+The MFR whitelists URLs that are allowed to have a preview generated. A test
+version of MFR has been installed using Docker Compose and this has been 
+configured from within the docker-compose.yml file to allow URLs from the 
+AWS_S3_BUCKET_FOR_FILE_PREVIEWS to be previewed from it.
 
 If there are no errors with the docker-compose up process then the GigaDB 
 website will be visble from [http://192.168.42.10](http://192.168.42.10) from a 
