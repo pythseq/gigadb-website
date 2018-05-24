@@ -298,8 +298,11 @@ ftp>
 
 ## File preview functionality in GigaDB
 
-The file preview functionality in GigaDB can be tested using Docker by
-deploying another 3 containers which each run the following services:
+Previously, the file preview functionality was executed using 4 VMs to run
+gigadb-website, FTP server, a queues server for managing jobs and a server for
+running the modular file renderer. Running these 4 VMs can slow your PC.
+However, the file preview functionality in GigaDB can now be tested using Docker
+by deploying another 3 containers to run the following services:
 
 ### Redis
 
@@ -325,9 +328,10 @@ plain/text type.
 
 ### Supervisor
 
-The supervisor service runs on the VSFTPD container. When it receives a message
-that the user has clicked on a preview icon on a GigaDB dataset web page, it 
-executes a function to create a preview file which is sent to the S3 bucket.
+A fourth service, `supervisor` is required but is already running on the VSFTPD
+container. When it receives a message that the user has clicked on a preview 
+icon on a GigaDB dataset web page, it executes a function to create a preview 
+file which is sent to the S3 bucket.
 
 The following commands can be used to check the status of supervisor and 
 start/stop the process:
@@ -343,6 +347,10 @@ A log file detailing the creation of preview file is available at
 Redis, beanstalk and the MFR work together as shown in the diagram below:
 
 ![Image of file preview architecture](https://drive.google.com/uc?export=view&id=1rbKrm7UjaIKaZe_Zzi8FJDUt1vTXJ87H)
+
+Also, see this [diagram](https://gist.githubusercontent.com/rija/f6fa3cfeda0f0a0da4c6f08326bbe6f7/raw/d882eddfb1028b07eaabbc6a5b264af78890921a/gistfile1.txt)
+for the architecture showing the relationship of the services involved in the 
+file preview and multi-file download functionalities.
 
 ## Container configuration
 
@@ -456,8 +464,24 @@ allow you to test the file table view functionality. If you look at the
 `Directory` Data Type. Clicking on `AltSplicing` will allow you to see the
 contents of the `AltSplicing` directory.
 
+## Multi-file downloads
 
+This functionality is currently switched off in GigaDB. A feature flag in 
+`protected/config/main.php` is used to set whether multi-file download is
+switched on or off:
+```php
+'multidownload' => array(
+    'class' => 'application.components.MultiDownload',
+    'download_host' => '<%= node[:gigadb][:multidownload][:download_host] %>',
+    'download_protocol' => 'ftp://',
+    'multidownload_job_queue' => 'filespackaging',
+    'temporary_directory' => '/tmp/bundles',
+    'ftp_bundle_directory' => '/pub/user_bundles',
+    'feature_enabled' => false,
+```
 
+N.B. `protected/config/main.php` is created using from Chef template file
+`yii-main.php.erb` in the `gigadb` cookbook.
 
 
 
